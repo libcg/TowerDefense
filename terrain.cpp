@@ -11,7 +11,7 @@ Terrain::Terrain()
     sonImageChemin = QImage("data/terrain_chemin.png");
     sonImageBaseAllie = QImage("data/base_allie.png");
     sonImageBaseEnnemi = QImage("data/base_ennemi.png");
-    saGrilleUnite = new std::vector< std::vector<UniteStatique*> > (TAILLE_GRILLE, std::vector<UniteStatique*>(TAILLE_GRILLE, NULL));
+    saGrilleUnite = new std::vector< std::vector<UniteStatique*> > (TAILLE_GRILLE, std::vector<UniteStatique*>(TAILLE_GRILLE, (UniteStatique*)NULL));
     saGrilleChemin = new std::vector< std::vector<bool> > (TAILLE_GRILLE, std::vector<bool>(TAILLE_GRILLE, false));
 
     charge(QString("data/1.lvl"));
