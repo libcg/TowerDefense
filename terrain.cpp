@@ -20,7 +20,7 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
-    // FIXME tout plante pour une raison obscure
+    // FIXME tout plante pour une raison obscure.
 
     /*for (std::vector< std::vector<UniteStatique*> >::iterator it = saGrilleUnite->begin(); it != saGrilleUnite->end(); it++)
     {
