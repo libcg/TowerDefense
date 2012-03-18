@@ -3,9 +3,10 @@
 #include <QApplication>
 #include <QPainter>
 
-Game::Game(QGLWidget *parent)
-    : QGLWidget(parent)
+Game::Game(QWidget *parent) :
+    QGLWidget(parent)
 {
+    timer = new QTimer(this);
     painter = new QPainter();
     curseur = new Curseur();
     terrain = Terrain();
@@ -22,6 +23,11 @@ Game::Game(QGLWidget *parent)
     /* On active le suivi de curseur */
 
     setMouseTracking(true);
+
+    /* On active la boucle de jeu (60 ips) */
+
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    timer->start(1000/60);
 }
 
 
@@ -30,7 +36,6 @@ Game::~Game()
     delete painter;
     delete curseur;
 }
-
 
 void Game::logicEvent()
 {
@@ -61,10 +66,6 @@ void Game::paintEvent(QPaintEvent *event)
     /* On termine le rendu */
 
     painter->end();
-
-    /* On demande à la fenêtre de se rafraîchir pour faire la boucle de jeu */
-
-    this->update();
 }
 
 

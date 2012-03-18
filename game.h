@@ -4,6 +4,7 @@
 #include "terrain.h"
 #include "curseur.h"
 #include <QtOpenGL/QGLWidget>
+#include <QTimer>
 #include <QKeyEvent>
 
 #define WIDTH 960
@@ -11,15 +12,16 @@
 
 class Game : public QGLWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 private:
-  QPainter* painter;
-  Curseur* curseur;
-  Terrain terrain;
+    QTimer* timer;
+    QPainter* painter;
+    Curseur* curseur;
+    Terrain terrain;
 
 public:
-    Game(QGLWidget *parent = 0);
+    Game(QWidget *parent = 0);
     ~Game();
 
 protected:
