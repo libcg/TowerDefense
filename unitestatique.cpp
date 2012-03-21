@@ -2,13 +2,13 @@
 #include "game.h"
 #include <QPainter>
 
-UniteStatique::UniteStatique(int x, int y)
+UniteStatique::UniteStatique(QPoint unePosition)
 {
-    saPuissance = 0;
-    sonType = 0;
-    sonCout = 0;
-    sonX = x*TAILLE_UNITESTATIQUE + (WIDTH-32*TAILLE_GRILLE)/2;
-    sonY = y*TAILLE_UNITESTATIQUE;
+    //saPuissance = 0;
+    //sonType = 0;
+    //sonCout = 0;
+    saPosition = QPoint(unePosition.x()*TAILLE_UNITESTATIQUE + (WIDTH-32*TAILLE_GRILLE)/2,
+                        unePosition.y()*TAILLE_UNITESTATIQUE);
     sonAngle = 0.0;
     sonImageBase = QImage("data/unitestatique_base.png");
     sonImageCanon = QImage("data/unitestatique_canon.png");
@@ -22,7 +22,7 @@ void UniteStatique::affiche(QPainter* painter)
 
     /* On affiche la base */
 
-    painter->translate(this->sonX, this->sonY);
+    painter->translate(saPosition);
     painter->drawImage(0, 0, sonImageBase);
 
     /* On affiche le canon */

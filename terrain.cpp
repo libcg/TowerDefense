@@ -12,7 +12,9 @@ Terrain::Terrain()
     sonImageBaseAllie = QImage("data/base_allie.png");
     sonImageBaseEnnemi = QImage("data/base_ennemi.png");
     saGrilleUnite = new std::vector< std::vector<UniteStatique*> > (TAILLE_GRILLE, std::vector<UniteStatique*>(TAILLE_GRILLE, (UniteStatique*)NULL));
+    sonVecUniteMobile = new std::vector< UniteMobile* >();
     saGrilleChemin = new std::vector< std::vector<bool> > (TAILLE_GRILLE, std::vector<bool>(TAILLE_GRILLE, false));
+    sonChemin = new std::vector<QPoint>();
 
     charge(QString("data/1.lvl"));
 }
@@ -59,6 +61,7 @@ void Terrain::charge(QString unChemin)
             break;
         }
 
+        sonChemin->push_back(QPoint(x, y));
         (*saGrilleChemin)[y][x] = true;
     }
 
@@ -74,7 +77,7 @@ void Terrain::pose(int x, int y)
         return;
     }
 
-    (*saGrilleUnite)[y][x] = new UniteStatique(x, y);
+    (*saGrilleUnite)[y][x] = new UniteStatique(QPoint(x, y));
 }
 
 
@@ -130,12 +133,28 @@ void Terrain::affiche(Curseur* curseur, QPainter* painter)
     }
 
     painter->restore();
+
+    /* On affiche les unités mobiles */
+
+    painter->save();
+
+    for (unsigned int i=0; i<sonVecUniteMobile->size(); i++)
+    {
+        (*sonVecUniteMobile)[i]->affiche(painter);
+    }
+
+    painter->restore();
 }
 
 
 void Terrain::logique(Curseur* curseur)
 {
     int decalage = WIDTH/2-32*TAILLE_GRILLE/2;
+
+    if (curseur->getClic())
+    {
+        sonVecUniteMobile->push_back(new UniteMobile(sonChemin));
+    }
 
     for (unsigned int i=0; i<TAILLE_GRILLE; i++)
     {
@@ -159,5 +178,10 @@ void Terrain::logique(Curseur* curseur)
                 (*saGrilleUnite)[i][j]->logique();
             }
         }
+    }
+
+    for (unsigned int i=0; i<sonVecUniteMobile->size(); i++)
+    {
+        (*sonVecUniteMobile)[i]->logique();
     }
 }

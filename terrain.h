@@ -2,6 +2,7 @@
 #define TERRAIN_H
 
 #include "unitestatique.h"
+#include "unitemobile.h"
 #include "curseur.h"
 
 #include <QImage>
@@ -21,7 +22,10 @@ private:
     QImage sonImageBaseAllie;
     QImage sonImageBaseEnnemi;
     std::vector< std::vector<UniteStatique*> >* saGrilleUnite;
+    std::vector< UniteMobile* >* sonVecUniteMobile;
     std::vector< std::vector<bool> >* saGrilleChemin;
+    std::vector<QPoint>* sonChemin;
+
 public:
     Terrain();
     ~Terrain();

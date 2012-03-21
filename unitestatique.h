@@ -8,17 +8,17 @@
 class UniteStatique
 {
 private:
-    int saPuissance;
-    int sonType; // FIXME type
-    int sonCout;
-    int sonX;
-    int sonY;
+    //int saPuissance;
+    //int sonType;
+    //int sonCout;
+    QPoint saPosition;
     double sonAngle;
     QImage sonImageBase;
     QImage sonImageCanon;
     QImage sonImageCanonFeu;
+
 public:
-    UniteStatique(int x, int y);
+    UniteStatique(QPoint unePosition);
     void affiche(QPainter* painter);
     void logique();
 };
