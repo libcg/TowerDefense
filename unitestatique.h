@@ -1,6 +1,7 @@
 #ifndef UNITESTATIQUE_H
 #define UNITESTATIQUE_H
 
+#include <unitemobile.h>
 #include <QImage>
 
 #define TAILLE_UNITESTATIQUE 32
@@ -8,18 +9,20 @@
 class UniteStatique
 {
 private:
-    //int saPuissance;
-    //int sonType;
-    //int sonCout;
     QPoint saPosition;
     double sonAngle;
+    const double saPortee;
     QImage sonImageBase;
     QImage sonImageCanon;
     QImage sonImageCanonFeu;
+    std::vector< UniteMobile* >* sonVecUniteMobile;
+    UniteMobile *sonUniteCible;
+
+    UniteMobile* rechercheUnite();
 
 public:
-    UniteStatique(QPoint unePosition);
-    void affiche(QPainter* painter);
+    UniteStatique(QPoint unePosition, std::vector< UniteMobile* >* unVecUniteMobile);
+    void affiche(QPainter* unPainter);
     void logique();
 };
 

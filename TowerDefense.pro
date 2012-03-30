@@ -11,18 +11,18 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    game.cpp \
     terrain.cpp \
     unitestatique.cpp \
     curseur.cpp \
-    unitemobile.cpp
+    unitemobile.cpp \
+    jeu.cpp
 
 HEADERS  += \
-    game.h \
     terrain.h \
     unitestatique.h \
     curseur.h \
-    unitemobile.h
+    unitemobile.h \
+    jeu.h
 
 OTHER_FILES += \
     data/1.lvl \

@@ -8,6 +8,7 @@ class Curseur
 private:
     QPoint saPosition;
     bool sonClic;
+
 public:
     Curseur();
     void setPosition(QPoint unePosition);

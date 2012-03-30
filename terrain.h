@@ -30,9 +30,9 @@ public:
     Terrain();
     ~Terrain();
     void charge(QString unChemin);
-    void pose(int x, int y);
-    void affiche(Curseur* curseur, QPainter* painter);
-    void logique(Curseur* curseur);
+    void pose(int unX, int unY);
+    void affiche(Curseur* unCurseur, QPainter* unPainter);
+    void logique(Curseur* unCurseur);
 };
 
 #endif // TERRAIN_H

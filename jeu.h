@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef JEU_H
+#define JEU_H
 
 #include "terrain.h"
 #include "curseur.h"
@@ -10,19 +10,19 @@
 #define WIDTH 960
 #define HEIGHT 544
 
-class Game : public QGLWidget
+class Jeu : public QGLWidget
 {
     Q_OBJECT
 
 private:
-    QTimer* timer;
-    QPainter* painter;
-    Curseur* curseur;
-    Terrain terrain;
+    QTimer* sonTimer;
+    QPainter* sonPainter;
+    Curseur* sonCurseur;
+    Terrain* sonTerrain;
 
 public:
-    Game(QWidget *parent = 0);
-    ~Game();
+    Jeu(QWidget *parent = 0);
+    ~Jeu();
 
 protected:
     void logicEvent();
@@ -31,4 +31,4 @@ protected:
     void paintEvent(QPaintEvent *event);
 };
 
-#endif // GAME_H
+#endif // JEU_H

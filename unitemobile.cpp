@@ -1,5 +1,5 @@
 #include "unitemobile.h"
-#include "game.h"
+#include "jeu.h"
 
 UniteMobile::UniteMobile(std::vector<QPoint>* unChemin) :
     sonImage("data/unitestatique_canon_feu.png"), sonChemin(unChemin), sonEtapeChemin(0)
@@ -44,12 +44,17 @@ void UniteMobile::logique()
     deplace();
 }
 
-void UniteMobile::affiche(QPainter* painter)
+void UniteMobile::affiche(QPainter* unPainter)
 {
-    painter->save();
+    unPainter->save();
 
-    painter->translate(saPosition);
-    painter->drawImage(0, 0, sonImage);
+    unPainter->translate(saPosition);
+    unPainter->drawImage(0, 0, sonImage);
 
-    painter->restore();
+    unPainter->restore();
+}
+
+QPointF UniteMobile::getSaPosition()
+{
+    return saPosition;
 }

@@ -16,8 +16,8 @@ private:
     QPointF saPosition;
     QPointF sonIncrement;
     std::vector<QPoint>* sonChemin;
-    int sonPas;
-    int sonEtapeChemin;
+    unsigned int sonPas;
+    unsigned int sonEtapeChemin;
 
     void calcul(QPointF unePositionArrivee);
     void deplace();
@@ -25,8 +25,8 @@ private:
 public:
     UniteMobile(std::vector<QPoint>* unChemin);
     void logique();
-    void affiche(QPainter* painter);
-    QPoint getPositionEcran();
+    void affiche(QPainter* unPainter);
+    QPointF getSaPosition();
 };
 
 #endif // UNITEMOBILE_H

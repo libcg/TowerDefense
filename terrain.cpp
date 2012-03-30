@@ -1,5 +1,5 @@
 #include "terrain.h"
-#include "game.h"
+#include "jeu.h"
 #include <QPainter>
 #include <QFile>
 #include <QTextStream>
@@ -22,21 +22,18 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
-    // FIXME tout plante pour une raison obscure.
-
-    /*for (std::vector< std::vector<UniteStatique*> >::iterator it = saGrilleUnite->begin(); it != saGrilleUnite->end(); it++)
+    for (std::vector< std::vector<UniteStatique*> >::iterator it = saGrilleUnite->begin(); it != saGrilleUnite->end(); it++)
     {
         for (std::vector<UniteStatique*>::iterator jt = it->begin(); jt != it->end(); jt++)
         {
-            if (*jt != NULL)
-            {
-                delete *jt;
-            }
+            delete *jt;
         }
     }
 
     delete saGrilleUnite;
-    delete saGrilleChemin;*/
+    delete sonVecUniteMobile;
+    delete saGrilleChemin;
+    delete sonChemin;
 }
 
 
@@ -77,11 +74,11 @@ void Terrain::pose(int x, int y)
         return;
     }
 
-    (*saGrilleUnite)[y][x] = new UniteStatique(QPoint(x, y));
+    (*saGrilleUnite)[y][x] = new UniteStatique(QPoint(x, y), sonVecUniteMobile);
 }
 
 
-void Terrain::affiche(Curseur* curseur, QPainter* painter)
+void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
 {
     /* On affiche le sol */
 
@@ -89,20 +86,20 @@ void Terrain::affiche(Curseur* curseur, QPainter* painter)
     {
         for (int j=0; j<=WIDTH/TAILLE_SOL; j++)
         {
-            painter->drawImage(TAILLE_SOL*j, TAILLE_SOL*i, sonImageSol);
+            unPainter->drawImage(TAILLE_SOL*j, TAILLE_SOL*i, sonImageSol);
         }
     }
 
     /* On affiche les bases */
 
-    painter->drawImage((WIDTH-32*TAILLE_GRILLE)/2-64, HEIGHT/2-96/2, sonImageBaseAllie);
-    painter->drawImage((WIDTH+32*TAILLE_GRILLE)/2, HEIGHT/2-96/2, sonImageBaseEnnemi);
+    unPainter->drawImage((WIDTH-32*TAILLE_GRILLE)/2-64, HEIGHT/2-96/2, sonImageBaseAllie);
+    unPainter->drawImage((WIDTH+32*TAILLE_GRILLE)/2, HEIGHT/2-96/2, sonImageBaseEnnemi);
 
     /* On affiche le chemin */
 
-    painter->save();
-    painter->resetTransform();
-    painter->translate((WIDTH-32*TAILLE_GRILLE)/2, 0.0);
+    unPainter->save();
+    unPainter->resetTransform();
+    unPainter->translate((WIDTH-32*TAILLE_GRILLE)/2, 0.0);
 
     for (int i=0; i<TAILLE_GRILLE; i++)
     {
@@ -110,16 +107,16 @@ void Terrain::affiche(Curseur* curseur, QPainter* painter)
         {
             if ((*saGrilleChemin)[i][j])
             {
-                painter->drawImage(TAILLE_CHEMIN*j, TAILLE_CHEMIN*i, sonImageChemin);
+                unPainter->drawImage(TAILLE_CHEMIN*j, TAILLE_CHEMIN*i, sonImageChemin);
             }
         }
     }
 
-    painter->restore();
+    unPainter->restore();
 
     /* On affiche les unités statiques */
 
-    painter->save();
+    unPainter->save();
 
     for (unsigned int i=0; i<TAILLE_GRILLE; i++)
     {
@@ -127,31 +124,30 @@ void Terrain::affiche(Curseur* curseur, QPainter* painter)
         {
             if ((*saGrilleUnite)[i][j] != NULL)
             {
-                (*saGrilleUnite)[i][j]->affiche(painter);
+                (*saGrilleUnite)[i][j]->affiche(unPainter);
             }
         }
     }
 
-    painter->restore();
+    unPainter->restore();
 
     /* On affiche les unités mobiles */
 
-    painter->save();
+    unPainter->save();
 
     for (unsigned int i=0; i<sonVecUniteMobile->size(); i++)
     {
-        (*sonVecUniteMobile)[i]->affiche(painter);
+        (*sonVecUniteMobile)[i]->affiche(unPainter);
     }
 
-    painter->restore();
+    unPainter->restore();
 }
 
-
-void Terrain::logique(Curseur* curseur)
+void Terrain::logique(Curseur* unCurseur)
 {
     int decalage = WIDTH/2-32*TAILLE_GRILLE/2;
 
-    if (curseur->getClic())
+    if (unCurseur->getClic())
     {
         sonVecUniteMobile->push_back(new UniteMobile(sonChemin));
     }
@@ -164,9 +160,9 @@ void Terrain::logique(Curseur* curseur)
             {
                 /* Création lors d'un clic */
 
-                if (curseur->getClic() &&
+                if (unCurseur->getClic() &&
                     !(*saGrilleChemin)[i][j] &&
-                    QRect(decalage+32*j, 32*i, 32, 32).contains(QPoint(curseur->getX(), curseur->getY())))
+                    QRect(decalage+32*j, 32*i, 32, 32).contains(QPoint(unCurseur->getX(), unCurseur->getY())))
                 {
                     this->pose(j, i);
                 }

@@ -1,5 +1,5 @@
 #include "curseur.h"
-#include "game.h"
+#include "jeu.h"
 
 Curseur::Curseur()
 {
