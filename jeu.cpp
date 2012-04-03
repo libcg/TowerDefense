@@ -33,10 +33,10 @@ Jeu::Jeu(QWidget *parent) :
 
 Jeu::~Jeu()
 {
-    //delete sonTimer;
-    //delete sonCurseur;
-    //delete sonPainter;
-    //delete sonTerrain;
+    delete sonTimer;
+    delete sonCurseur;
+    delete sonPainter;
+    delete sonTerrain;
 }
 
 void Jeu::logicEvent()

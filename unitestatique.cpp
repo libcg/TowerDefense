@@ -49,18 +49,30 @@ void UniteStatique::affiche(QPainter* unPainter)
     unPainter->restore();
 }
 
+#include <iostream>
+
 void UniteStatique::logique()
 {
     sonUniteCible = rechercheUnite();
 
     if (sonUniteCible == NULL)
     {
-        sonAngle += 1.7;
+        sonAngle += ROTATION_UNITESTATIQUE;
     }
     else
     {
         QPointF laPos = sonUniteCible->getSaPosition();
 
-        sonAngle = atan2(laPos.y() - saPosition.y(), laPos.x() - saPosition.x()) * 180 / 3.14159;
+        double lAngleCible = fmod(atan2(laPos.y() - saPosition.y(), laPos.x() - saPosition.x()) * 180 / 3.14159, 360);
+        double lAngleTemp = fmod(sonAngle, 360);
+        if (lAngleCible < 0) lAngleCible += 360;
+        if (lAngleTemp < 0) lAngleTemp += 360;
+
+        double laDiff = lAngleTemp - lAngleCible;
+        if (laDiff >  180) laDiff -= 360;
+        if (laDiff < -180) laDiff += 360;
+
+        if (laDiff < 0) sonAngle += 2*ROTATION_UNITESTATIQUE;
+        else if (laDiff > 0) sonAngle -= 2*ROTATION_UNITESTATIQUE;
     }
 }

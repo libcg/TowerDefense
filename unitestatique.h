@@ -5,6 +5,7 @@
 #include <QImage>
 
 #define TAILLE_UNITESTATIQUE 32
+#define ROTATION_UNITESTATIQUE 1.7
 
 class UniteStatique
 {
