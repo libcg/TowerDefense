@@ -3,26 +3,36 @@
 
 #include <unitemobile.h>
 #include <QImage>
+#include <QTimer>
+#include <QObject>
 
 #define TAILLE_UNITESTATIQUE 32
 #define ROTATION_UNITESTATIQUE 1.7
+#define DUREE_TIR 7
 
-class UniteStatique
+class UniteStatique : public QObject
 {
+    Q_OBJECT
+
 private:
     QPoint saPosition;
     double sonAngle;
     const double saPortee;
+    unsigned sonTir;
     QImage sonImageBase;
     QImage sonImageCanon;
     QImage sonImageCanonFeu;
-    std::vector< UniteMobile* >* sonVecUniteMobile;
+    std::list<UniteMobile*> *saListeUniteMobile;
     UniteMobile *sonUniteCible;
+    QTimer *sonTimerTir;
 
     UniteMobile* rechercheUnite();
 
+private slots:
+    void tir();
+
 public:
-    UniteStatique(QPoint unePosition, std::vector< UniteMobile* >* unVecUniteMobile);
+    UniteStatique(QPoint unePosition, std::list< UniteMobile* > *uneListeUniteMobile, QObject *parent = 0);
     void affiche(QPainter* unPainter);
     void logique();
 };

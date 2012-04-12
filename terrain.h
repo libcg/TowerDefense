@@ -6,6 +6,7 @@
 #include "curseur.h"
 
 #include <QImage>
+#include <list>
 #include <vector>
 
 #define TAILLE_GRILLE 17
@@ -22,9 +23,11 @@ private:
     QImage sonImageBaseAllie;
     QImage sonImageBaseEnnemi;
     std::vector< std::vector<UniteStatique*> >* saGrilleUnite;
-    std::vector< UniteMobile* >* sonVecUniteMobile;
+    std::list< UniteMobile* >* saListeUniteMobile;
     std::vector< std::vector<bool> >* saGrilleChemin;
     std::vector<QPoint>* sonChemin;
+
+    void supprimeUnitesMobiles();
 
 public:
     Terrain();

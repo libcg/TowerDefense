@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <cmath>
+#include <string>
 
 Terrain::Terrain()
 {
@@ -12,7 +13,7 @@ Terrain::Terrain()
     sonImageBaseAllie = QImage("data/base_allie.png");
     sonImageBaseEnnemi = QImage("data/base_ennemi.png");
     saGrilleUnite = new std::vector< std::vector<UniteStatique*> > (TAILLE_GRILLE, std::vector<UniteStatique*>(TAILLE_GRILLE, (UniteStatique*)NULL));
-    sonVecUniteMobile = new std::vector< UniteMobile* >();
+    saListeUniteMobile = new std::list< UniteMobile* >();
     saGrilleChemin = new std::vector< std::vector<bool> > (TAILLE_GRILLE, std::vector<bool>(TAILLE_GRILLE, false));
     sonChemin = new std::vector<QPoint>();
 
@@ -31,9 +32,32 @@ Terrain::~Terrain()
     }
 
     delete saGrilleUnite;
-    delete sonVecUniteMobile;
+    delete saListeUniteMobile;
     delete saGrilleChemin;
     delete sonChemin;
+}
+
+
+void Terrain::supprimeUnitesMobiles()
+{
+    std::list<UniteMobile*>::iterator it;
+    bool laSuppression;
+
+    do
+    {
+        laSuppression = false;
+
+        for (it = saListeUniteMobile->begin(); it != saListeUniteMobile->end(); it++)
+        {
+            if ((*it)->estASupprimer())
+            {
+                laSuppression = true;
+                delete (*it);
+                saListeUniteMobile->erase(it);
+                break;
+            }
+        }
+    } while (laSuppression);
 }
 
 
@@ -74,7 +98,7 @@ void Terrain::pose(int x, int y)
         return;
     }
 
-    (*saGrilleUnite)[y][x] = new UniteStatique(QPoint(x, y), sonVecUniteMobile);
+    (*saGrilleUnite)[y][x] = new UniteStatique(QPoint(x, y), saListeUniteMobile);
 }
 
 
@@ -135,9 +159,10 @@ void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
 
     unPainter->save();
 
-    for (unsigned int i=0; i<sonVecUniteMobile->size(); i++)
+    std::list<UniteMobile*>::iterator it;
+    for (it = saListeUniteMobile->begin(); it != saListeUniteMobile->end(); it++)
     {
-        (*sonVecUniteMobile)[i]->affiche(unPainter);
+        (*it)->affiche(unPainter);
     }
 
     unPainter->restore();
@@ -149,7 +174,7 @@ void Terrain::logique(Curseur* unCurseur)
 
     if (unCurseur->getClic())
     {
-        sonVecUniteMobile->push_back(new UniteMobile(sonChemin));
+        saListeUniteMobile->push_back(new UniteMobile(sonChemin));
     }
 
     for (unsigned int i=0; i<TAILLE_GRILLE; i++)
@@ -176,8 +201,10 @@ void Terrain::logique(Curseur* unCurseur)
         }
     }
 
-    for (unsigned int i=0; i<sonVecUniteMobile->size(); i++)
+    supprimeUnitesMobiles();
+
+    for (std::list<UniteMobile*>::iterator it = saListeUniteMobile->begin(); it != saListeUniteMobile->end(); it++)
     {
-        (*sonVecUniteMobile)[i]->logique();
+        (*it)->logique();
     }
 }
