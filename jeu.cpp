@@ -9,7 +9,8 @@ Jeu::Jeu(QWidget *parent) :
     sonTimer = new QTimer(this);
     sonPainter = new QPainter();
     sonCurseur = new Curseur();
-    sonTerrain = new Terrain();
+    saPartie = new Partie();
+    sonTerrain = new Terrain(saPartie);
 
     /* On centre la fenêtre */
 
@@ -36,12 +37,16 @@ Jeu::~Jeu()
     delete sonTimer;
     delete sonCurseur;
     delete sonPainter;
+    delete saPartie;
     delete sonTerrain;
 }
 
 void Jeu::logicEvent()
 {
-    sonTerrain->logique(sonCurseur);
+    if (!saPartie->getSonEchec())
+    {
+        sonTerrain->logique(sonCurseur);
+    }
 
     sonCurseur->setClic(false);
 }
@@ -57,13 +62,18 @@ void Jeu::paintEvent(QPaintEvent *event)
 
     sonPainter->begin(this);
 
-    /* On active le filtre bilinéaire */
+    /* Filtre bilinéaire et antialiasing pour le texte */
 
     sonPainter->setRenderHint(QPainter::SmoothPixmapTransform);
+    sonPainter->setRenderHint(QPainter::TextAntialiasing);
 
     /* On affiche le terrain et ses unités */
 
     sonTerrain->affiche(sonCurseur, sonPainter);
+
+    /* On affiche les informations de partie */
+
+    saPartie->affiche(sonPainter);
 
     /* On termine le rendu */
 

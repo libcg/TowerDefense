@@ -33,7 +33,8 @@ private slots:
 
 public:
     UniteStatique(QPoint unePosition, std::list< UniteMobile* > *uneListeUniteMobile, QObject *parent = 0);
-    void affiche(QPainter* unPainter);
+    ~UniteStatique();
+    void affiche(QPainter *unPainter);
     void logique();
 };
 

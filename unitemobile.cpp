@@ -1,8 +1,8 @@
 #include "unitemobile.h"
 #include "jeu.h"
 
-UniteMobile::UniteMobile(std::vector<QPoint>* unChemin) :
-    sonImage("data/unitemobile.png"), sonImageDegat("data/unitemobile_degat.png"),
+UniteMobile::UniteMobile(std::vector<QPoint>* unChemin, QObject *parent) :
+    QObject(parent), sonImage("data/unitemobile.png"), sonImageDegat("data/unitemobile_degat.png"),
     sonChemin(unChemin), sonEtapeChemin(0), sesPV(100), sonDegat(0), aSupprimer(false)
 {
     saPosition = QPointF((*sonChemin)[0].x()*TAILLE_UNITEMOBILE + (WIDTH-32*TAILLE_GRILLE)/2,
@@ -71,6 +71,11 @@ void UniteMobile::infligerDegat(int unDegat)
 QPointF UniteMobile::getSaPosition()
 {
     return saPosition;
+}
+
+bool UniteMobile::estArrivee()
+{
+    return sonIncrement == QPointF(0, 0);
 }
 
 bool UniteMobile::estASupprimer()

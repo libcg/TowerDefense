@@ -18,6 +18,10 @@ UniteStatique::UniteStatique(QPoint unePosition, std::list< UniteMobile* >* uneL
     sonTimerTir->start(1000/3);
 }
 
+UniteStatique::~UniteStatique()
+{
+    delete sonTimerTir;
+}
 
 UniteMobile* UniteStatique::rechercheUnite()
 {

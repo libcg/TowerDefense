@@ -3,12 +3,16 @@
 
 #include "terrain.h"
 #include "curseur.h"
+#include "partie.h"
 #include <QtOpenGL/QGLWidget>
 #include <QTimer>
 #include <QKeyEvent>
 
 #define WIDTH 960
 #define HEIGHT 544
+
+class Terrain;
+class Partie;
 
 class Jeu : public QGLWidget
 {
@@ -19,9 +23,10 @@ private:
     QPainter* sonPainter;
     Curseur* sonCurseur;
     Terrain* sonTerrain;
+    Partie* saPartie;
 
 public:
-    Jeu(QWidget *parent = 0);
+    explicit Jeu(QWidget *parent = 0);
     ~Jeu();
 
 protected:

@@ -9,14 +9,16 @@
 #define TAILLE_UNITEMOBILE 32
 #define PAS 30
 
-class UniteMobile
+class UniteMobile : public QObject
 {
+    Q_OBJECT
+
 private:
     QImage sonImage;
     QImage sonImageDegat;
     QPointF saPosition;
     QPointF sonIncrement;
-    std::vector<QPoint>* sonChemin;
+    std::vector<QPoint> *sonChemin;
     unsigned int sonPas;
     unsigned int sonEtapeChemin;
     int sesPV;
@@ -27,11 +29,12 @@ private:
     void deplace();
 
 public:
-    UniteMobile(std::vector<QPoint>* unChemin);
+    explicit UniteMobile(std::vector<QPoint> *unChemin, QObject *parent = 0);
     void logique();
-    void affiche(QPainter* unPainter);
+    void affiche(QPainter *unPainter);
     void infligerDegat(int unDegat);
     QPointF getSaPosition();
+    bool estArrivee();
     bool estASupprimer();
 };
 

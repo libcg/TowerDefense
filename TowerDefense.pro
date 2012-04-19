@@ -15,14 +15,16 @@ SOURCES += main.cpp \
     unitestatique.cpp \
     curseur.cpp \
     unitemobile.cpp \
-    jeu.cpp
+    jeu.cpp \
+    partie.cpp
 
 HEADERS  += \
     terrain.h \
     unitestatique.h \
     curseur.h \
     unitemobile.h \
-    jeu.h
+    jeu.h \
+    partie.h
 
 OTHER_FILES += \
     data/1.lvl \
@@ -32,4 +34,5 @@ OTHER_FILES += \
     data/terrain_sol.png \
     data/unitestatique_base.png \
     data/unitestatique_canon_feu.png \
-    data/unitestatique_canon.png
+    data/unitestatique_canon.png \
+    TODO.txt

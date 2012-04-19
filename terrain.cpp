@@ -6,7 +6,8 @@
 #include <cmath>
 #include <string>
 
-Terrain::Terrain()
+Terrain::Terrain(Partie *unePartie, QObject *parent) :
+    QObject(parent), saPartie(unePartie)
 {
     sonImageSol = QImage("data/terrain_sol.png");
     sonImageChemin = QImage("data/terrain_chemin.png");
@@ -51,6 +52,8 @@ void Terrain::supprimeUnitesMobiles()
         {
             if ((*it)->estASupprimer())
             {
+                if ((*it)->estArrivee()) saPartie->infligerDegat(10);
+
                 laSuppression = true;
                 delete (*it);
                 saListeUniteMobile->erase(it);
