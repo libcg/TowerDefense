@@ -25,15 +25,15 @@ private:
     Terrain* sonTerrain;
     Partie* saPartie;
 
-public:
-    explicit Jeu(QWidget *parent = 0);
-    ~Jeu();
-
-protected:
     void logicEvent();
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
+
+public:
+    explicit Jeu(QWidget *parent = 0);
+    ~Jeu();
+    void recommencer();
 };
 
 #endif // JEU_H

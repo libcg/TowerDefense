@@ -1,4 +1,4 @@
-#include "jeu.h"
+#include "fenetre.h"
 #include <QApplication>
 #include <QThread>
 
@@ -6,11 +6,9 @@ int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
 
-  Jeu *jeu = new Jeu();
+  Fenetre *laFenetre = new Fenetre();
 
-  app.setApplicationName(QString("TowerDefense"));
-
-  jeu->show();
+  laFenetre->show();
 
   return app.exec();
 }

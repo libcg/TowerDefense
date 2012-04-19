@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     curseur.cpp \
     unitemobile.cpp \
     jeu.cpp \
-    partie.cpp
+    partie.cpp \
+    fenetre.cpp
 
 HEADERS  += \
     terrain.h \
@@ -24,7 +25,8 @@ HEADERS  += \
     curseur.h \
     unitemobile.h \
     jeu.h \
-    partie.h
+    partie.h \
+    fenetre.h
 
 OTHER_FILES += \
     data/1.lvl \
@@ -36,3 +38,6 @@ OTHER_FILES += \
     data/unitestatique_canon_feu.png \
     data/unitestatique_canon.png \
     TODO.txt
+
+FORMS += \
+    fenetre.ui
