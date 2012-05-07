@@ -12,21 +12,25 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     terrain.cpp \
-    unitestatique.cpp \
     curseur.cpp \
-    unitemobile.cpp \
     jeu.cpp \
     partie.cpp \
-    fenetre.cpp
+    fenetre.cpp \
+    niveau.cpp \
+    tourelle.cpp \
+    ennemi.cpp \
+    vague.cpp
 
 HEADERS  += \
     terrain.h \
-    unitestatique.h \
     curseur.h \
-    unitemobile.h \
     jeu.h \
     partie.h \
-    fenetre.h
+    fenetre.h \
+    niveau.h \
+    tourelle.h \
+    ennemi.h \
+    vague.h
 
 OTHER_FILES += \
     data/1.lvl \

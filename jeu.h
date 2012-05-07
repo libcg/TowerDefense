@@ -22,7 +22,6 @@ private:
     QTimer* sonTimer;
     QPainter* sonPainter;
     Curseur* sonCurseur;
-    Terrain* sonTerrain;
     Partie* saPartie;
 
     void logicEvent();
@@ -33,7 +32,7 @@ private:
 public:
     explicit Jeu(QWidget *parent = 0);
     ~Jeu();
-    void recommencer();
+    Partie* getSaPartie();
 };
 
 #endif // JEU_H

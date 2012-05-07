@@ -1,24 +1,26 @@
-#ifndef UNITEMOBILE_H
-#define UNITEMOBILE_H
+#ifndef ENNEMI_H
+#define ENNEMI_H
 
 #include <vector>
 #include <QPoint>
 #include <QImage>
 #include <QPainter>
+#include <QTextStream>
 
-#define TAILLE_UNITEMOBILE 32
+#define TAILLE_ENNEMI 32
 #define PAS 30
 
-class UniteMobile : public QObject
+class Ennemi : public QObject
 {
     Q_OBJECT
 
 private:
+    std::vector<QPoint> *sonChemin;
     QImage sonImage;
     QImage sonImageDegat;
+
     QPointF saPosition;
     QPointF sonIncrement;
-    std::vector<QPoint> *sonChemin;
     unsigned int sonPas;
     unsigned int sonEtapeChemin;
     int sesPV;
@@ -29,13 +31,17 @@ private:
     void deplace();
 
 public:
-    explicit UniteMobile(std::vector<QPoint> *unChemin, QObject *parent = 0);
+    explicit Ennemi(std::vector<QPoint> *unChemin, QObject *parent = 0);
+    void charge(QTextStream *unStream);
+    void sauvegarde(QTextStream *unStream);
     void logique();
     void affiche(QPainter *unPainter);
     void infligerDegat(int unDegat);
     QPointF getSaPosition();
     bool estArrivee();
     bool estASupprimer();
+
+    static int prix();
 };
 
 #endif // UNITEMOBILE_H

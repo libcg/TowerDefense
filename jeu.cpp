@@ -6,11 +6,10 @@
 Jeu::Jeu(QWidget *parent) :
     QGLWidget(parent)
 {
-    sonTimer = new QTimer(this);
+    sonTimer = new QTimer();
     sonPainter = new QPainter();
     sonCurseur = new Curseur();
     saPartie = new Partie();
-    sonTerrain = new Terrain(saPartie);
 
     /* On centre la fenêtre */
 
@@ -38,15 +37,12 @@ Jeu::~Jeu()
     delete sonCurseur;
     delete sonPainter;
     delete saPartie;
-    delete sonTerrain;
 }
+
 
 void Jeu::logicEvent()
 {
-    if (!saPartie->getSonEchec())
-    {
-        sonTerrain->logique(sonCurseur);
-    }
+    saPartie->logique(sonCurseur);
 
     sonCurseur->setClic(false);
 }
@@ -67,13 +63,9 @@ void Jeu::paintEvent(QPaintEvent *event)
     sonPainter->setRenderHint(QPainter::SmoothPixmapTransform);
     sonPainter->setRenderHint(QPainter::TextAntialiasing);
 
-    /* On affiche le terrain et ses unités */
+    /* On affiche la partie en cours */
 
-    sonTerrain->affiche(sonCurseur, sonPainter);
-
-    /* On affiche les informations de partie */
-
-    saPartie->affiche(sonPainter);
+    saPartie->affiche(sonCurseur, sonPainter);
 
     /* On termine le rendu */
 
@@ -93,4 +85,10 @@ void Jeu::mousePressEvent(QMouseEvent *event)
     {
         sonCurseur->setClic(true);
     }
+}
+
+
+Partie* Jeu::getSaPartie()
+{
+    return saPartie;
 }

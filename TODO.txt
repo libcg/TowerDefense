@@ -1,4 +1,2 @@
-- vagues d'ennemis
-- classes d'ennemis
-- QMainWindow pour charger/sauvegarder/commencer une partie
-- Perdre la partie
+- types d'ennemis
+- sauvegarde/chargement partie

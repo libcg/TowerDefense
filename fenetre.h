@@ -13,14 +13,18 @@ class Fenetre : public QMainWindow
     Q_OBJECT
     
 private:
+    Ui::Fenetre *ui;
     Jeu* sonJeu;
+
+private slots:
+    void on_actionNouvellePartie_triggered();
+    void on_actionChargerPartie_triggered();
+    void on_actionSauvegarderPartie_triggered();
+    void on_actionRecommencer_triggered();
 
 public:
     explicit Fenetre(QWidget *parent = 0);
     ~Fenetre();
-    
-private:
-    Ui::Fenetre *ui;
 };
 
 #endif // FENETRE_H

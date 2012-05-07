@@ -2,61 +2,122 @@
 #include "jeu.h"
 #include <QPainter>
 #include <QFile>
-#include <QTextStream>
 #include <cmath>
 #include <string>
 
-Terrain::Terrain(Partie *unePartie, QObject *parent) :
+Terrain::Terrain(Partie *unePartie, std::vector<QPoint>* unChemin, QObject *parent) :
     QObject(parent), saPartie(unePartie)
 {
     sonImageSol = QImage("data/terrain_sol.png");
     sonImageChemin = QImage("data/terrain_chemin.png");
     sonImageBaseAllie = QImage("data/base_allie.png");
     sonImageBaseEnnemi = QImage("data/base_ennemi.png");
-    saGrilleUnite = new std::vector< std::vector<UniteStatique*> > (TAILLE_GRILLE, std::vector<UniteStatique*>(TAILLE_GRILLE, (UniteStatique*)NULL));
-    saListeUniteMobile = new std::list< UniteMobile* >();
-    saGrilleChemin = new std::vector< std::vector<bool> > (TAILLE_GRILLE, std::vector<bool>(TAILLE_GRILLE, false));
-    sonChemin = new std::vector<QPoint>();
+    saGrilleTourelles = new std::vector< std::vector<Tourelle*> >(TAILLE_GRILLE, std::vector<Tourelle*>(TAILLE_GRILLE, (Tourelle*)NULL));
+    saListeEnnemis = new std::list<Ennemi*>();
 
-    charge(QString("data/1.lvl"));
+    saGrilleChemin = new std::vector< std::vector<bool> >(TAILLE_GRILLE, std::vector<bool>(TAILLE_GRILLE, false));
+    for (unsigned int i=0; i<unChemin->size(); i++)
+        (*saGrilleChemin)[unChemin->at(i).y()][unChemin->at(i).x()] = true;
 }
 
 
 Terrain::~Terrain()
 {
-    for (std::vector< std::vector<UniteStatique*> >::iterator it = saGrilleUnite->begin(); it != saGrilleUnite->end(); it++)
+    for (std::vector< std::vector<Tourelle*> >::iterator it = saGrilleTourelles->begin(); it != saGrilleTourelles->end(); it++)
     {
-        for (std::vector<UniteStatique*>::iterator jt = it->begin(); jt != it->end(); jt++)
+        for (std::vector<Tourelle*>::iterator jt = it->begin(); jt != it->end(); jt++)
         {
             delete *jt;
         }
     }
 
-    delete saGrilleUnite;
-    delete saListeUniteMobile;
+    delete saGrilleTourelles;
+    delete saListeEnnemis;
     delete saGrilleChemin;
-    delete sonChemin;
+}
+
+#include <QDebug>
+void Terrain::charge(QTextStream *unStream)
+{
+    int i, j;
+
+    unStream->readLine();
+    {
+        for (;;)
+        {
+            if (unStream->read(2) == ";\n") break;
+            else unStream->seek(unStream->pos() - 2);
+
+            *unStream >> i >> j;
+            (*saGrilleTourelles)[i][j] = new Tourelle(QPoint(j, i), saListeEnnemis);
+            (*saGrilleTourelles)[i][j]->charge(unStream);
+
+            unStream->read(1); // '\n'
+        }
+    }
+    unStream->read(1);
+
+    unStream->readLine();
+    {
+        for (;;)
+        {
+            if (unStream->read(2) == ";\n") break;
+            else unStream->seek(unStream->pos() - 2);
+
+            saListeEnnemis->push_back(new Ennemi(saPartie->getSonNiveau()->getSonChemin()));
+            saListeEnnemis->back()->charge(unStream);
+
+            unStream->read(1); // '\n'
+        }
+    }
+    unStream->read(1);
 }
 
 
-void Terrain::supprimeUnitesMobiles()
+void Terrain::sauvegarde(QTextStream *unStream)
 {
-    std::list<UniteMobile*>::iterator it;
+    *unStream << "terrain/tourelles" << endl;
+    {
+        for (unsigned int i=0; i<TAILLE_GRILLE; i++)
+            for (unsigned int j=0; j<TAILLE_GRILLE; j++)
+                if ((*saGrilleTourelles)[i][j] != NULL)
+                {
+                    *unStream << i << ' ' << j << endl;
+                    (*saGrilleTourelles)[i][j]->sauvegarde(unStream);
+                }
+    }
+    *unStream << ';' << endl;
+
+    *unStream << "terrain/ennemis" << endl;
+    {
+        for (std::list<Ennemi*>::iterator it=saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
+            (*it)->sauvegarde(unStream);
+    }
+    *unStream << ';' << endl;
+}
+
+
+void Terrain::nettoieListeEnnemis()
+{
+    std::list<Ennemi*>::iterator it;
     bool laSuppression;
 
     do
     {
         laSuppression = false;
 
-        for (it = saListeUniteMobile->begin(); it != saListeUniteMobile->end(); it++)
+        for (it = saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
         {
             if ((*it)->estASupprimer())
             {
-                if ((*it)->estArrivee()) saPartie->infligerDegat(10);
+                if ((*it)->estArrivee())
+                    saPartie->infligerDegat(10);
+                else
+                    saPartie->ajoutCredits(*it);
 
                 laSuppression = true;
                 delete (*it);
-                saListeUniteMobile->erase(it);
+                saListeEnnemis->erase(it);
                 break;
             }
         }
@@ -64,44 +125,21 @@ void Terrain::supprimeUnitesMobiles()
 }
 
 
-void Terrain::charge(QString unChemin)
+bool Terrain::ajouteTourelle(Curseur *unCurseur)
 {
-    QFile file(unChemin);
+    int decalage = WIDTH/2 - 32*TAILLE_GRILLE/2;
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        return;
-    }
+    for (unsigned int i=0; i<TAILLE_GRILLE; i++)
+        for (unsigned int j=0; j<TAILLE_GRILLE; j++)
+            if ((*saGrilleTourelles)[i][j] == NULL &&
+                (*saGrilleChemin)[i][j] == false &&
+                QRect(decalage+32*j, 32*i, 32, 32).contains(QPoint(unCurseur->getX(), unCurseur->getY())))
+            {
+                (*saGrilleTourelles)[i][j] = new Tourelle(QPoint(j, i), saListeEnnemis);
+                return true;
+            }
 
-    QTextStream stream(&file);
-    int x, y;
-
-    for (;;)
-    {
-        stream >> x >> y;
-
-        if (stream.atEnd())
-        {
-            break;
-        }
-
-        sonChemin->push_back(QPoint(x, y));
-        (*saGrilleChemin)[y][x] = true;
-    }
-
-    file.close();
-}
-
-
-void Terrain::pose(int x, int y)
-{
-    if (!(0 <= x && x < TAILLE_GRILLE) ||
-        !(0 <= y && y < TAILLE_GRILLE))
-    {
-        return;
-    }
-
-    (*saGrilleUnite)[y][x] = new UniteStatique(QPoint(x, y), saListeUniteMobile);
+    return false;
 }
 
 
@@ -110,12 +148,8 @@ void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
     /* On affiche le sol */
 
     for (int i=0; i<=HEIGHT/TAILLE_SOL; i++)
-    {
         for (int j=0; j<=WIDTH/TAILLE_SOL; j++)
-        {
             unPainter->drawImage(TAILLE_SOL*j, TAILLE_SOL*i, sonImageSol);
-        }
-    }
 
     /* On affiche les bases */
 
@@ -129,41 +163,33 @@ void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
     unPainter->translate((WIDTH-32*TAILLE_GRILLE)/2, 0.0);
 
     for (int i=0; i<TAILLE_GRILLE; i++)
-    {
         for (int j=0; j<TAILLE_GRILLE; j++)
-        {
             if ((*saGrilleChemin)[i][j])
             {
                 unPainter->drawImage(TAILLE_CHEMIN*j, TAILLE_CHEMIN*i, sonImageChemin);
             }
-        }
-    }
 
     unPainter->restore();
 
-    /* On affiche les unités statiques */
+    /* On affiche les tourelles */
 
     unPainter->save();
 
     for (unsigned int i=0; i<TAILLE_GRILLE; i++)
-    {
         for (unsigned int j=0; j<TAILLE_GRILLE; j++)
-        {
-            if ((*saGrilleUnite)[i][j] != NULL)
+            if ((*saGrilleTourelles)[i][j] != NULL)
             {
-                (*saGrilleUnite)[i][j]->affiche(unPainter);
+                (*saGrilleTourelles)[i][j]->affiche(unPainter);
             }
-        }
-    }
 
     unPainter->restore();
 
-    /* On affiche les unités mobiles */
+    /* On affiche les ennemis */
 
     unPainter->save();
 
-    std::list<UniteMobile*>::iterator it;
-    for (it = saListeUniteMobile->begin(); it != saListeUniteMobile->end(); it++)
+    std::list<Ennemi*>::iterator it;
+    for (it = saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
     {
         (*it)->affiche(unPainter);
     }
@@ -171,43 +197,30 @@ void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
     unPainter->restore();
 }
 
+
 void Terrain::logique(Curseur* unCurseur)
 {
-    int decalage = WIDTH/2-32*TAILLE_GRILLE/2;
-
-    if (unCurseur->getClic())
-    {
-        saListeUniteMobile->push_back(new UniteMobile(sonChemin));
-    }
-
     for (unsigned int i=0; i<TAILLE_GRILLE; i++)
-    {
         for (unsigned int j=0; j<TAILLE_GRILLE; j++)
-        {
-            if ((*saGrilleUnite)[i][j] == NULL)
+            if ((*saGrilleTourelles)[i][j] != NULL)
             {
-                /* Création lors d'un clic */
-
-                if (unCurseur->getClic() &&
-                    !(*saGrilleChemin)[i][j] &&
-                    QRect(decalage+32*j, 32*i, 32, 32).contains(QPoint(unCurseur->getX(), unCurseur->getY())))
-                {
-                    this->pose(j, i);
-                }
+                (*saGrilleTourelles)[i][j]->logique();
             }
-            else
-            {
-                /* Logique de l'unité statique */
 
-                (*saGrilleUnite)[i][j]->logique();
-            }
-        }
-    }
+    nettoieListeEnnemis();
 
-    supprimeUnitesMobiles();
-
-    for (std::list<UniteMobile*>::iterator it = saListeUniteMobile->begin(); it != saListeUniteMobile->end(); it++)
-    {
+    for (std::list<Ennemi*>::iterator it = saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
         (*it)->logique();
-    }
+}
+
+
+std::list<Ennemi*>* Terrain::getSaListeEnnemis()
+{
+    return saListeEnnemis;
+}
+
+
+void Terrain::ajouteEnnemi(Ennemi *unEnnemi)
+{
+    saListeEnnemis->push_back(unEnnemi);
 }

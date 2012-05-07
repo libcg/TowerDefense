@@ -2,24 +2,56 @@
 #define PARTIE_H
 
 #include "jeu.h"
+#include "terrain.h"
+#include "niveau.h"
 #include <QObject>
+#include <QTimer>
 #include <QPainter>
+#include <QTextStream>
+
+#define INTERVALLE_ENNEMI 2
+
+class Niveau;
+class Terrain;
 
 class Partie : public QObject
 {
     Q_OBJECT
 
 private:
+    Terrain *sonTerrain;
+    Niveau *sonNiveau;
+    QTimer *sonTimerDecompte;
+    int sonNumeroNiveau;
     int saVie;
+    int sesCredits;
+    bool saVictoire;
     bool sonEchec;
+    int saVague;
+    int sonDecompteTemps;
+    int sonDecompteEnnemi;
 
     void afficheBarreVie(QPainter *unPainter);
+    void afficheInfoVague(QPainter *unPainter);
+    void afficheEtat(QPainter *unPainter, QString unTitre);
+    void afficheCredits(QPainter *unPainter);
+
+private slots:
+    void decompte();
+    void chargerNiveau(QString unChemin);
 
 public:
     explicit Partie(QObject *parent = 0);
     void infligerDegat(int unDegat);
-    void affiche(QPainter *unPainter);
+    void ajoutCredits(Ennemi* unEnnemi);
+    void nouvellePartie();
+    void chargerPartie();
+    void sauvegarderPartie();
+    void recommencerNiveau();
+    void affiche(Curseur *unCurseur, QPainter *unPainter);
+    void logique(Curseur *unCurseur);
     bool getSonEchec();
+    Niveau* getSonNiveau();
 };
 
 #endif // PARTIE_H

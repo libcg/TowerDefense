@@ -32,8 +32,9 @@
     <property name="title">
      <string>Partie</string>
     </property>
-    <addaction name="actionNouvelle_partie"/>
-    <addaction name="actionCharger_partie"/>
+    <addaction name="actionNouvellePartie"/>
+    <addaction name="actionChargerPartie"/>
+    <addaction name="actionSauvegarderPartie"/>
     <addaction name="separator"/>
     <addaction name="actionRecommencer"/>
    </widget>
@@ -51,7 +52,7 @@
    <addaction name="menuPartie"/>
    <addaction name="menuAide"/>
   </widget>
-  <action name="actionNouvelle_partie">
+  <action name="actionNouvellePartie">
    <property name="text">
     <string>Nouvelle partie</string>
    </property>
@@ -59,9 +60,9 @@
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionCharger_partie">
+  <action name="actionChargerPartie">
    <property name="text">
-    <string>Charger partie...</string>
+    <string>Charger partie</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -73,6 +74,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionSauvegarderPartie">
+   <property name="text">
+    <string>Sauvegarder partie</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>
