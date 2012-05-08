@@ -44,6 +44,7 @@ public:
     bool estArrivee();
     bool estASupprimer();
     int getSonPrix();
+    int getSonType();
 };
 
 #endif // UNITEMOBILE_H

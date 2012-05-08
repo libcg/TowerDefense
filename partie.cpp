@@ -283,9 +283,3 @@ Niveau* Partie::getSonNiveau()
 {
     return sonNiveau;
 }
-
-
-int Partie::getSaVague()
-{
-    return saVague;
-}

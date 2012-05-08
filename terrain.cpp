@@ -36,7 +36,7 @@ Terrain::~Terrain()
     delete saGrilleChemin;
 }
 
-#include <QDebug>
+
 void Terrain::charge(QTextStream *unStream)
 {
     int i, j;
@@ -64,11 +64,8 @@ void Terrain::charge(QTextStream *unStream)
             if (unStream->read(2) == ";\n") break;
             else unStream->seek(unStream->pos() - 2);
 
-            saListeEnnemis->push_back
-                (
-                new Ennemi(saPartie->getSonNiveau()->getSonChemin(),
-                           saPartie->getSonNiveau()->getSesVagues()->at(saPartie->getSaVague()).getSonTypeEnnemis())
-                );
+            *unStream >> i;
+            saListeEnnemis->push_back(new Ennemi(saPartie->getSonNiveau()->getSonChemin(), i));
             saListeEnnemis->back()->charge(unStream);
 
             unStream->read(1); // '\n'
@@ -95,7 +92,10 @@ void Terrain::sauvegarde(QTextStream *unStream)
     *unStream << "terrain/ennemis" << endl;
     {
         for (std::list<Ennemi*>::iterator it=saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
+        {
+            *unStream << (*it)->getSonType() << endl;
             (*it)->sauvegarde(unStream);
+        }
     }
     *unStream << ';' << endl;
 }

@@ -141,3 +141,9 @@ int Ennemi::getSonPrix()
 {
     return sonPrix;
 }
+
+
+int Ennemi::getSonType()
+{
+    return sonType;
+}

@@ -60,7 +60,6 @@ public:
     void affiche(Curseur *unCurseur, QPainter *unPainter);
     void logique(Curseur *unCurseur);
     Niveau* getSonNiveau();
-    int getSaVague();
 };
 
 #endif // PARTIE_H
