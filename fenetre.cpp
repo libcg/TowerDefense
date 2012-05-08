@@ -11,6 +11,16 @@ Fenetre::Fenetre(QWidget *parent) :
     setFixedSize(WIDTH, HEIGHT+24);
     setCentralWidget(sonJeu);
     setWindowTitle("TowerDefense");
+
+    saMessageBox = new QMessageBox(
+                QMessageBox::NoIcon, "Comment jouer?",
+                "Clic gauche pour placer une tourelle,\n"
+                "Clic droit pour changer de type de tourelle.\n"
+                "\n\n"
+                "Vos credits sont limites, et augmenteront lorsque les ennemis sont detruits.\n"
+                "\n\n"
+                "Bonne chance !",
+                QMessageBox::NoButton, this);
 }
 
 
@@ -41,4 +51,10 @@ void Fenetre::on_actionSauvegarderPartie_triggered()
 void Fenetre::on_actionRecommencer_triggered()
 {
     sonJeu->getSaPartie()->recommencerNiveau();
+}
+
+
+void Fenetre::on_actionCommentJouer_triggered()
+{
+    saMessageBox->show();
 }

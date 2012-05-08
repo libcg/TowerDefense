@@ -38,18 +38,13 @@
     <addaction name="separator"/>
     <addaction name="actionRecommencer"/>
    </widget>
-   <widget class="QMenu" name="menuPartie">
-    <property name="title">
-     <string>Options</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuAide">
     <property name="title">
      <string>Aide</string>
     </property>
+    <addaction name="actionCommentJouer"/>
    </widget>
    <addaction name="menuFichier"/>
-   <addaction name="menuPartie"/>
    <addaction name="menuAide"/>
   </widget>
   <action name="actionNouvellePartie">
@@ -82,6 +77,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionCommentJouer">
+   <property name="text">
+    <string>Comment jouer?</string>
    </property>
   </action>
  </widget>

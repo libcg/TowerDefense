@@ -277,7 +277,7 @@ void Partie::logique(Curseur *unCurseur)
     {
         case JOUE:
         {
-            if (unCurseur->getBouton() == Qt::MidButton && unCurseur->getDernierBouton() != Qt::MidButton)
+            if (unCurseur->getBouton() == Qt::RightButton && unCurseur->getDernierBouton() != Qt::RightButton)
             {
                 sonTypeTourelle = (sonTypeTourelle+1) % 2;
                 chargeImageTypeTourelle();
