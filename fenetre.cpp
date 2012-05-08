@@ -8,7 +8,7 @@ Fenetre::Fenetre(QWidget *parent) :
     ui->setupUi(this);
 
     sonJeu = new Jeu();
-    setFixedSize(WIDTH, HEIGHT);
+    setFixedSize(WIDTH, HEIGHT+24);
     setCentralWidget(sonJeu);
     setWindowTitle("TowerDefense");
 }

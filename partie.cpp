@@ -199,7 +199,7 @@ void Partie::afficheInfoVague(QPainter *unPainter)
 {
     unPainter->save();
 
-    unPainter->translate(10, HEIGHT-50);
+    unPainter->translate(10, HEIGHT-28);
     unPainter->setPen(Qt::white);
     unPainter->setBrush(Qt::black);
     if (sonDecompteTemps > 0)
@@ -236,10 +236,10 @@ void Partie::afficheCredits(QPainter *unPainter)
 {
     unPainter->save();
 
-    unPainter->translate(0, HEIGHT-50);
+    unPainter->translate(0, HEIGHT-20);
     unPainter->setPen(Qt::white);
     unPainter->setBrush(Qt::black);
-    unPainter->drawText(0, 0, WIDTH-10, 50, Qt::AlignRight, QString::number(sesCredits) + " credit(s)");
+    unPainter->drawText(0, 0, WIDTH-10, 20, Qt::AlignRight, QString::number(sesCredits) + " credit(s)");
 
     unPainter->restore();
 }
