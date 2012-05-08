@@ -4,7 +4,8 @@
 Curseur::Curseur()
 {
     saPosition = QPoint(WIDTH/2, HEIGHT/2);
-    sonClic = false;
+    sonBouton = Qt::NoButton;
+    sonDernierBouton = Qt::NoButton;
 }
 
 
@@ -14,9 +15,15 @@ void Curseur::setPosition(QPoint unePosition)
 }
 
 
-void Curseur::setClic(bool unClic)
+void Curseur::setBouton(Qt::MouseButton unBouton)
 {
-    sonClic = unClic;
+    sonBouton = unBouton;
+}
+
+
+void Curseur::setDernierBouton(Qt::MouseButton unBouton)
+{
+    sonDernierBouton = unBouton;
 }
 
 
@@ -32,7 +39,13 @@ int Curseur::getY()
 }
 
 
-bool Curseur::getClic()
+Qt::MouseButton Curseur::getBouton()
 {
-    return sonClic;
+    return sonBouton;
+}
+
+
+Qt::MouseButton Curseur::getDernierBouton()
+{
+    return sonDernierBouton;
 }

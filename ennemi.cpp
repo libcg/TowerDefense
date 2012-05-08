@@ -7,7 +7,7 @@ QImage sonImageDegat;
 
 Ennemi::Ennemi(std::vector<QPoint>* unChemin, int unType, QObject *parent) :
     QObject(parent),
-    sonType(unType), sonChemin(unChemin), sonEtapeChemin(0),
+    sonChemin(unChemin), sonType(unType), sonEtapeChemin(0),
     sonDegat(0), aSupprimer(false)
 {
     saPosition = QPointF((*sonChemin)[0].x()*TAILLE_ENNEMI + (WIDTH-32*TAILLE_GRILLE)/2,
@@ -23,9 +23,9 @@ Ennemi::Ennemi(std::vector<QPoint>* unChemin, int unType, QObject *parent) :
 
 void Ennemi::type()
 {
-    int n_pas[3] = { 30, 35, 60 };
-    int pv[3] = { 100, 300, 1000 };
-    int prix[3] = { 500, 1000, 5000 };
+    int n_pas[] = { 30, 35, 60 };
+    int pv[] = { 100, 300, 1000 };
+    int prix[] = { 500, 1000, 5000 };
 
     sonImage = QImage("data/ennemi" + QString::number(sonType) + ".png");
     sonImageDegat = QImage("data/ennemi" + QString::number(sonType) + "_degat.png");

@@ -19,10 +19,10 @@ class Jeu : public QGLWidget
     Q_OBJECT
 
 private:
-    QTimer* sonTimer;
-    QPainter* sonPainter;
-    Curseur* sonCurseur;
-    Partie* saPartie;
+    QTimer *sonTimer;
+    QPainter *sonPainter;
+    Curseur *sonCurseur;
+    Partie *saPartie;
 
     void logicEvent();
     void mouseMoveEvent(QMouseEvent *event);
@@ -32,7 +32,7 @@ private:
 public:
     explicit Jeu(QWidget *parent = 0);
     ~Jeu();
-    Partie* getSaPartie();
+    Partie *getSaPartie();
 };
 
 #endif // JEU_H

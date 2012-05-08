@@ -12,6 +12,9 @@ Partie::Partie(QObject *parent) :
     QObject::connect(sonTimerDecompte, SIGNAL(timeout()), this, SLOT(decompte()));
 
     nouvellePartie();
+
+    sonImageBaseTourelle = QImage("data/tourelle_base.png");
+    chargeImageTypeTourelle();
 }
 
 
@@ -83,6 +86,7 @@ void Partie::chargerPartie()
         stream >> saVague;
         stream >> sonDecompteTemps;
         stream >> sonDecompteEnnemi;
+        stream >> sonTypeTourelle;
     }
     stream.read(3);
 
@@ -110,6 +114,7 @@ void Partie::sauvegarderPartie()
         stream << saVague << endl;
         stream << sonDecompteTemps << endl;
         stream << sonDecompteEnnemi << endl;
+        stream << sonTypeTourelle << endl;
     }
     stream << ';' << endl;
 
@@ -153,6 +158,12 @@ void Partie::niveauSuivant()
 }
 
 
+void Partie::chargeImageTypeTourelle()
+{
+    sonImageTypeTourelle = QImage("data/tourelle" + QString::number(sonTypeTourelle) + "_canon.png");
+}
+
+
 void Partie::recommencerNiveau()
 {
     delete sonTerrain;
@@ -164,6 +175,7 @@ void Partie::recommencerNiveau()
     saVague = 0;
     sonDecompteTemps = sonNiveau->getSesVagues()->at(0).getSonDelai();
     sonDecompteEnnemi = sonNiveau->getSesVagues()->at(0).getSonNombreEnnemis();
+    sonTypeTourelle = 0;
 }
 
 
@@ -236,6 +248,9 @@ void Partie::afficheCredits(QPainter *unPainter)
 void Partie::affiche(Curseur *unCurseur, QPainter *unPainter)
 {
     sonTerrain->affiche(unCurseur, unPainter);
+    sonTerrain->afficheSurvol(unCurseur, unPainter, &sonImageBaseTourelle,
+                              sesCredits - Tourelle::prix(sonTypeTourelle) >= 0 ? &sonImageTypeTourelle
+                                                                                : NULL);
 
     afficheBarreVie(unPainter);
     afficheInfoVague(unPainter);
@@ -262,16 +277,22 @@ void Partie::logique(Curseur *unCurseur)
     {
         case JOUE:
         {
-            if (unCurseur->getClic() && sesCredits - Tourelle::prix() >= 0)
-                if (sonTerrain->ajouteTourelle(unCurseur))
-                    sesCredits -= Tourelle::prix();
+            if (unCurseur->getBouton() == Qt::MidButton && unCurseur->getDernierBouton() != Qt::MidButton)
+            {
+                sonTypeTourelle = (sonTypeTourelle+1) % 2;
+                chargeImageTypeTourelle();
+            }
+
+            if (unCurseur->getBouton() == Qt::LeftButton && sesCredits - Tourelle::prix(sonTypeTourelle) >= 0)
+                if (sonTerrain->ajouteTourelle(unCurseur, sonTypeTourelle))
+                    sesCredits -= Tourelle::prix(sonTypeTourelle);
 
             sonTerrain->logique(unCurseur);
         }
         break;
         case VICTOIRE:
         {
-            if (unCurseur->getClic())
+            if (unCurseur->getBouton() == Qt::LeftButton)
                 niveauSuivant();
         }
         break;

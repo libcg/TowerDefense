@@ -44,7 +44,8 @@ void Jeu::logicEvent()
 {
     saPartie->logique(sonCurseur);
 
-    sonCurseur->setClic(false);
+    sonCurseur->setDernierBouton(sonCurseur->getBouton());
+    sonCurseur->setBouton(Qt::NoButton);
 }
 
 
@@ -81,10 +82,7 @@ void Jeu::mouseMoveEvent(QMouseEvent *event)
 
 void Jeu::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton)
-    {
-        sonCurseur->setClic(true);
-    }
+    sonCurseur->setBouton(event->button());
 }
 
 

@@ -7,15 +7,18 @@ class Curseur
 {
 private:
     QPoint saPosition;
-    bool sonClic;
+    Qt::MouseButton sonBouton;
+    Qt::MouseButton sonDernierBouton;
 
 public:
     Curseur();
     void setPosition(QPoint unePosition);
-    void setClic(bool unClic);
+    void setBouton(Qt::MouseButton unBouton);
+    void setDernierBouton(Qt::MouseButton unDernierBouton);
     int getX();
     int getY();
-    bool getClic();
+    Qt::MouseButton getBouton();
+    Qt::MouseButton getDernierBouton();
 };
 
 #endif // CURSEUR_H

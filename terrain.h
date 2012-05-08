@@ -42,9 +42,10 @@ public:
     void charge(QTextStream *unStream);
     void sauvegarde(QTextStream *unStream);
     void affiche(Curseur *unCurseur, QPainter *unPainter);
+    void afficheSurvol(Curseur *unCurseur, QPainter *unPainter, QImage *uneImageBaseTourelle, QImage *uneImageTypeTourelle);
     void logique(Curseur *unCurseur);
     void ajouteEnnemi(Ennemi *unEnnemi);
-    bool ajouteTourelle(Curseur *unCurseur);
+    bool ajouteTourelle(Curseur *unCurseur, int unType);
     std::list<Ennemi*>* getSaListeEnnemis();
 };
 

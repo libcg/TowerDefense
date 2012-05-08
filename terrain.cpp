@@ -35,7 +35,7 @@ Terrain::~Terrain()
 
 void Terrain::charge(QTextStream *unStream)
 {
-    int i, j;
+    int i, j, k;
 
     unStream->readLine();
     {
@@ -45,7 +45,8 @@ void Terrain::charge(QTextStream *unStream)
             else unStream->seek(unStream->pos() - 2);
 
             *unStream >> i >> j;
-            (*saGrilleTourelles)[i][j] = new Tourelle(QPoint(j, i), saListeEnnemis);
+            *unStream >> k;
+            (*saGrilleTourelles)[i][j] = new Tourelle(QPoint(j, i), saListeEnnemis, k);
             (*saGrilleTourelles)[i][j]->charge(unStream);
 
             unStream->read(1); // '\n'
@@ -80,6 +81,7 @@ void Terrain::sauvegarde(QTextStream *unStream)
                 if ((*saGrilleTourelles)[i][j] != NULL)
                 {
                     *unStream << i << ' ' << j << endl;
+                    *unStream << (*saGrilleTourelles)[i][j]->getSonType() << endl;
                     (*saGrilleTourelles)[i][j]->sauvegarde(unStream);
                 }
     }
@@ -125,7 +127,7 @@ void Terrain::nettoieListeEnnemis()
 }
 
 
-bool Terrain::ajouteTourelle(Curseur *unCurseur)
+bool Terrain::ajouteTourelle(Curseur *unCurseur, int unType)
 {
     int decalage = WIDTH/2 - 32*TAILLE_GRILLE/2;
 
@@ -135,7 +137,7 @@ bool Terrain::ajouteTourelle(Curseur *unCurseur)
                 (*saGrilleChemin)[i][j] == false &&
                 QRect(decalage+32*j, 32*i, 32, 32).contains(QPoint(unCurseur->getX(), unCurseur->getY())))
             {
-                (*saGrilleTourelles)[i][j] = new Tourelle(QPoint(j, i), saListeEnnemis);
+                (*saGrilleTourelles)[i][j] = new Tourelle(QPoint(j, i), saListeEnnemis, unType);
                 return true;
             }
 
@@ -195,6 +197,28 @@ void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
     }
 
     unPainter->restore();
+}
+
+
+void Terrain::afficheSurvol(Curseur *unCurseur, QPainter *unPainter, QImage *uneImageBaseTourelle, QImage *uneImageTypeTourelle)
+{
+    int decalage = WIDTH/2 - 32*TAILLE_GRILLE/2;
+
+    for (unsigned int i=0; i<TAILLE_GRILLE; i++)
+        for (unsigned int j=0; j<TAILLE_GRILLE; j++)
+            if ((*saGrilleTourelles)[i][j] == NULL &&
+                (*saGrilleChemin)[i][j] == false &&
+                QRect(decalage+32*j, 32*i, 32, 32).contains(QPoint(unCurseur->getX(), unCurseur->getY())))
+            {
+                unPainter->save();
+                unPainter->translate(j*TAILLE_TOURELLE + (WIDTH-32*TAILLE_GRILLE)/2,
+                                     i*TAILLE_TOURELLE);
+                unPainter->setOpacity(0.5);
+                unPainter->drawImage(0, 0, *uneImageBaseTourelle);
+                if (uneImageTypeTourelle != NULL)
+                    unPainter->drawImage(0, 0, *uneImageTypeTourelle);
+                unPainter->restore();
+            }
 }
 
 

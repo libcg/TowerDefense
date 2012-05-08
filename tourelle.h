@@ -22,26 +22,31 @@ private:
     QImage sonImageCanonFeu;
     Ennemi *sonEnnemiCible;
     QTimer *sonTimerTir;
+    int sonType;
+    double saPortee;
+    double sonTPS; // tir par seconde
+    int sesDegats;
 
     QPoint saPosition;
     double sonAngle;
-    double saPortee;
     unsigned int sonTir;
 
     Ennemi* rechercheEnnemi();
 
 private slots:
+    void type();
     void tir();
 
 public:
-    Tourelle(QPoint unePosition, std::list<Ennemi*> *uneListeEnnemis, QObject *parent = 0);
+    Tourelle(QPoint unePosition, std::list<Ennemi*> *uneListeEnnemis, int unType, QObject *parent = 0);
     ~Tourelle();
     void charge(QTextStream *unStream);
     void sauvegarde(QTextStream *unStream);
     void affiche(QPainter *unPainter);
     void logique();
+    int getSonType();
 
-    static int prix();
+    static int prix(int unType);
 };
 
 #endif // TOURELLE_H

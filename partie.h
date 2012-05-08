@@ -30,6 +30,9 @@ private:
     Terrain *sonTerrain;
     Niveau *sonNiveau;
     QTimer *sonTimerDecompte;
+    QImage sonImageBaseTourelle;
+    QImage sonImageTypeTourelle;
+
     int sonNumeroNiveau;
     int saVie;
     int sesCredits;
@@ -37,6 +40,7 @@ private:
     int saVague;
     int sonDecompteTemps;
     int sonDecompteEnnemi;
+    int sonTypeTourelle;
 
     void afficheBarreVie(QPainter *unPainter);
     void afficheInfoVague(QPainter *unPainter);
@@ -45,6 +49,7 @@ private:
     bool fin();
     void chargerNiveau();
     void niveauSuivant();
+    void chargeImageTypeTourelle();
 
 private slots:
     void decompte();

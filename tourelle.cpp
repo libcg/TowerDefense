@@ -4,21 +4,19 @@
 #include <cmath>
 #include <string>
 
-Tourelle::Tourelle(QPoint unePosition, std::list<Ennemi*>* uneListeEnnemis, QObject *parent) :
+Tourelle::Tourelle(QPoint unePosition, std::list<Ennemi*>* uneListeEnnemis, int unType, QObject *parent) :
     QObject(parent),
-    saListeEnnemis(uneListeEnnemis),
-    sonEnnemiCible(NULL),
-    sonAngle(0.0), saPortee(100), sonTir(false)
+    saListeEnnemis(uneListeEnnemis), sonEnnemiCible(NULL), sonType(unType),
+    sonAngle(0.0), sonTir(false)
 {
     saPosition = QPoint(unePosition.x()*TAILLE_TOURELLE + (WIDTH-32*TAILLE_GRILLE)/2,
                         unePosition.y()*TAILLE_TOURELLE);
-    sonImageBase = QImage("data/tourelle_base.png");
-    sonImageCanon = QImage("data/tourelle_canon.png");
-    sonImageCanonFeu = QImage("data/tourelle_canon_feu.png");
+
+    type();
 
     sonTimerTir = new QTimer();
     QObject::connect(sonTimerTir, SIGNAL(timeout()), this, SLOT(tir()));
-    sonTimerTir->start(1000/3);
+    sonTimerTir->start(1000 / sonTPS);
 }
 
 
@@ -28,13 +26,27 @@ Tourelle::~Tourelle()
 }
 
 
+void Tourelle::type()
+{
+    int portee[] = { 100, 400 };
+    double tps[] = { 3, 0.5 };
+    int degats[] = { 5, 50 };
+
+    sonImageBase = QImage("data/tourelle_base.png");
+    sonImageCanon = QImage("data/tourelle" + QString::number(sonType) + "_canon.png");
+    sonImageCanonFeu = QImage("data/tourelle" + QString::number(sonType) + "_canon_feu.png");
+    saPortee = portee[sonType];
+    sonTPS = tps[sonType];
+    sesDegats = degats[sonType];
+}
+
+
 void Tourelle::charge(QTextStream *unStream)
 {
     int x, y;
 
     *unStream >> x >> y; saPosition = QPoint(x, y);
     *unStream >> sonAngle;
-    *unStream >> saPortee;
     *unStream >> sonTir;
 }
 
@@ -43,7 +55,6 @@ void Tourelle::sauvegarde(QTextStream *unStream)
 {
     *unStream << saPosition.x() << ' ' << saPosition.y() << endl;
     *unStream << sonAngle << endl;
-    *unStream << saPortee << endl;
     *unStream << sonTir << endl;
 }
 
@@ -57,9 +68,7 @@ Ennemi* Tourelle::rechercheEnnemi()
         QPointF laPos = (*it)->getSaPosition();
 
         if (hypot(laPos.x() - saPosition.x(), laPos.y() - saPosition.y()) < saPortee)
-        {
             return *it;
-        }
     }
 
     return NULL;
@@ -70,7 +79,7 @@ void Tourelle::tir()
 {
     if (sonEnnemiCible != NULL)
     {
-        sonEnnemiCible->infligerDegat(5);
+        sonEnnemiCible->infligerDegat(sesDegats);
         sonTir = DUREE_TIR;
     }
 }
@@ -129,7 +138,15 @@ void Tourelle::logique()
 }
 
 
-int Tourelle::prix()
+int Tourelle::getSonType()
 {
-    return 2000;
+    return sonType;
+}
+
+
+int Tourelle::prix(int unType)
+{
+    int prix[] = { 2000, 3000 };
+
+    return prix[unType];
 }
