@@ -5,12 +5,10 @@ std::vector<QPoint> *sonChemin;
 QImage sonImage;
 QImage sonImageDegat;
 
-Ennemi::Ennemi(std::vector<QPoint>* unChemin, QObject *parent) :
+Ennemi::Ennemi(std::vector<QPoint>* unChemin, int unType, QObject *parent) :
     QObject(parent),
-    sonChemin(unChemin),
-    sonImage("data/ennemi.png"),
-    sonImageDegat("data/ennemi_degat.png"),
-    sonEtapeChemin(0), sesPV(100), sonDegat(0), aSupprimer(false)
+    sonChemin(unChemin), sonEtapeChemin(0),
+    sonDegat(0), aSupprimer(false), sonType(unType)
 {
     saPosition = QPointF((*sonChemin)[0].x()*TAILLE_ENNEMI + (WIDTH-32*TAILLE_GRILLE)/2,
                          (*sonChemin)[0].y()*TAILLE_ENNEMI);
@@ -18,6 +16,20 @@ Ennemi::Ennemi(std::vector<QPoint>* unChemin, QObject *parent) :
 
     calcul((*sonChemin)[1]);
     sonPas = 0;
+
+    type();
+}
+
+
+void Ennemi::type()
+{
+    int pv[3] = { 100, 300, 1000 };
+    int prix[3] = { 500, 1000, 5000 };
+
+    sonImage = QImage("data/ennemi" + QString::number(sonType) + ".png");
+    sonImageDegat = QImage("data/ennemi" + QString::number(sonType) + "_degat.png");
+    sesPV = pv[sonType];
+    sonPrix = prix[sonType];
 }
 
 
@@ -125,7 +137,7 @@ bool Ennemi::estASupprimer()
 }
 
 
-int Ennemi::prix()
+int Ennemi::getSonPrix()
 {
-    return 500;
+    return sonPrix;
 }

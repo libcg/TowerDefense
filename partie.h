@@ -11,6 +11,14 @@
 
 #define INTERVALLE_ENNEMI 2
 
+typedef enum
+{
+    JOUE,
+    DEFAITE,
+    VICTOIRE,
+    FIN
+} EtatPartie;
+
 class Niveau;
 class Terrain;
 
@@ -25,8 +33,7 @@ private:
     int sonNumeroNiveau;
     int saVie;
     int sesCredits;
-    bool saVictoire;
-    bool sonEchec;
+    int sonEtat;
     int saVague;
     int sonDecompteTemps;
     int sonDecompteEnnemi;
@@ -35,10 +42,12 @@ private:
     void afficheInfoVague(QPainter *unPainter);
     void afficheEtat(QPainter *unPainter, QString unTitre);
     void afficheCredits(QPainter *unPainter);
+    bool fin();
+    void chargerNiveau();
+    void niveauSuivant();
 
 private slots:
     void decompte();
-    void chargerNiveau(QString unChemin);
 
 public:
     explicit Partie(QObject *parent = 0);
@@ -50,8 +59,8 @@ public:
     void recommencerNiveau();
     void affiche(Curseur *unCurseur, QPainter *unPainter);
     void logique(Curseur *unCurseur);
-    bool getSonEchec();
     Niveau* getSonNiveau();
+    int getSaVague();
 };
 
 #endif // PARTIE_H

@@ -23,15 +23,18 @@ private:
     QPointF sonIncrement;
     unsigned int sonPas;
     unsigned int sonEtapeChemin;
-    int sesPV;
     int sonDegat;
     bool aSupprimer;
+    int sonType;
+    int sesPV;
+    int sonPrix;
 
+    void type();
     void calcul(QPointF unePositionArrivee);
     void deplace();
 
 public:
-    explicit Ennemi(std::vector<QPoint> *unChemin, QObject *parent = 0);
+    explicit Ennemi(std::vector<QPoint> *unChemin, int unType, QObject *parent = 0);
     void charge(QTextStream *unStream);
     void sauvegarde(QTextStream *unStream);
     void logique();
@@ -40,8 +43,7 @@ public:
     QPointF getSaPosition();
     bool estArrivee();
     bool estASupprimer();
-
-    static int prix();
+    int getSonPrix();
 };
 
 #endif // UNITEMOBILE_H

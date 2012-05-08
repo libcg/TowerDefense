@@ -64,7 +64,11 @@ void Terrain::charge(QTextStream *unStream)
             if (unStream->read(2) == ";\n") break;
             else unStream->seek(unStream->pos() - 2);
 
-            saListeEnnemis->push_back(new Ennemi(saPartie->getSonNiveau()->getSonChemin()));
+            saListeEnnemis->push_back
+                (
+                new Ennemi(saPartie->getSonNiveau()->getSonChemin(),
+                           saPartie->getSonNiveau()->getSesVagues()->at(saPartie->getSaVague()).getSonTypeEnnemis())
+                );
             saListeEnnemis->back()->charge(unStream);
 
             unStream->read(1); // '\n'

@@ -21,7 +21,11 @@ void Partie::decompte()
         sonDecompteTemps--;
     else if (sonDecompteEnnemi > 0)
     {
-        sonTerrain->ajouteEnnemi(new Ennemi(sonNiveau->getSonChemin()));
+        sonTerrain->ajouteEnnemi
+            (
+                new Ennemi(sonNiveau->getSonChemin(),
+                           sonNiveau->getSesVagues()->at(saVague).getSonTypeEnnemis())
+            );
         sonDecompteEnnemi--;
     }
     else if ((unsigned int)saVague+1 < sonNiveau->getSesVagues()->size())
@@ -31,7 +35,7 @@ void Partie::decompte()
         sonDecompteEnnemi = sonNiveau->getSesVagues()->at(saVague).getSonNombreEnnemis();
     }
     else if (sonTerrain->getSaListeEnnemis()->size() == 0)
-        saVictoire = true;
+        sonEtat = fin() ? FIN : VICTOIRE;
 }
 
 void Partie::infligerDegat(int unDegat)
@@ -41,14 +45,14 @@ void Partie::infligerDegat(int unDegat)
     if (saVie <= 0)
     {
         saVie = 0;
-        sonEchec = true;
+        sonEtat = DEFAITE;
     }
 }
 
 
 void Partie::ajoutCredits(Ennemi *unEnnemi)
 {
-    sesCredits += Ennemi::prix();
+    sesCredits += unEnnemi->getSonPrix();
 }
 
 
@@ -56,7 +60,7 @@ void Partie::nouvellePartie()
 {
     sonNumeroNiveau = 1;
 
-    chargerNiveau("data/" + QString::number(sonNumeroNiveau) + ".lvl");
+    chargerNiveau();
 }
 
 
@@ -68,16 +72,14 @@ void Partie::chargerPartie()
         return;
 
     QTextStream stream(&file);
-    int t;
 
     stream.readLine();
     {
         stream >> sonNumeroNiveau;
-        chargerNiveau("data/" + QString::number(sonNumeroNiveau) + ".lvl");
+        chargerNiveau();
         stream >> saVie;
         stream >> sesCredits;
-        stream >> t; saVictoire = t;
-        stream >> t; sonEchec = t;
+        stream >> sonEtat;
         stream >> saVague;
         stream >> sonDecompteTemps;
         stream >> sonDecompteEnnemi;
@@ -104,8 +106,7 @@ void Partie::sauvegarderPartie()
         stream << sonNumeroNiveau << endl;
         stream << saVie << endl;
         stream << sesCredits << endl;
-        stream << saVictoire << endl;
-        stream << sonEchec << endl;
+        stream << sonEtat << endl;
         stream << saVague << endl;
         stream << sonDecompteTemps << endl;
         stream << sonDecompteEnnemi << endl;
@@ -118,13 +119,37 @@ void Partie::sauvegarderPartie()
 }
 
 
-void Partie::chargerNiveau(QString unChemin)
+bool Partie::fin()
+{
+    Niveau *leNiveau;
+
+    leNiveau = new Niveau("data/" + QString::number(sonNumeroNiveau+1) + ".lvl");
+
+    if (!leNiveau->charge())
+        return true;
+
+    delete leNiveau;
+    return false;
+}
+
+
+void Partie::chargerNiveau()
 {
     delete sonNiveau;
-    sonNiveau = new Niveau(unChemin);
+    sonNiveau = new Niveau("data/" + QString::number(sonNumeroNiveau) + ".lvl");
 
-    if (sonNiveau->charge())
-        recommencerNiveau();
+    if (!sonNiveau->charge())
+        return;
+
+    recommencerNiveau();
+}
+
+
+void Partie::niveauSuivant()
+{
+    sonNumeroNiveau++;
+
+    chargerNiveau();
 }
 
 
@@ -135,8 +160,7 @@ void Partie::recommencerNiveau()
 
     saVie = 100;
     sesCredits = sonNiveau->getSesCredits();
-    saVictoire = false;
-    sonEchec = false;
+    sonEtat = JOUE;
     saVague = 0;
     sonDecompteTemps = sonNiveau->getSesVagues()->at(0).getSonDelai();
     sonDecompteEnnemi = sonNiveau->getSesVagues()->at(0).getSonNombreEnnemis();
@@ -217,35 +241,51 @@ void Partie::affiche(Curseur *unCurseur, QPainter *unPainter)
     afficheInfoVague(unPainter);
     afficheCredits(unPainter);
 
-    if (sonEchec)
-        afficheEtat(unPainter, "Echec");
-    else if (saVictoire)
-        afficheEtat(unPainter, "Victoire");
+    switch (sonEtat)
+    {
+        case DEFAITE:
+            afficheEtat(unPainter, "Defaite");
+        break;
+        case VICTOIRE:
+            afficheEtat(unPainter, "Victoire");
+        break;
+        case FIN:
+            afficheEtat(unPainter, "Fin de partie");
+        break;
+    }
 }
 
 
 void Partie::logique(Curseur *unCurseur)
 {
-    if (!sonEchec && !saVictoire)
+    switch (sonEtat)
     {
-        if (unCurseur->getClic() && sesCredits - Tourelle::prix() >= 0)
+        case JOUE:
         {
-            if (sonTerrain->ajouteTourelle(unCurseur))
-                sesCredits -= Tourelle::prix();
+            if (unCurseur->getClic() && sesCredits - Tourelle::prix() >= 0)
+                if (sonTerrain->ajouteTourelle(unCurseur))
+                    sesCredits -= Tourelle::prix();
+
+            sonTerrain->logique(unCurseur);
         }
-
-        sonTerrain->logique(unCurseur);
+        break;
+        case VICTOIRE:
+        {
+            if (unCurseur->getClic())
+                niveauSuivant();
+        }
+        break;
     }
-}
-
-
-bool Partie::getSonEchec()
-{
-    return sonEchec;
 }
 
 
 Niveau* Partie::getSonNiveau()
 {
     return sonNiveau;
+}
+
+
+int Partie::getSaVague()
+{
+    return saVague;
 }
