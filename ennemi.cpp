@@ -7,27 +7,29 @@ QImage sonImageDegat;
 
 Ennemi::Ennemi(std::vector<QPoint>* unChemin, int unType, QObject *parent) :
     QObject(parent),
-    sonChemin(unChemin), sonEtapeChemin(0),
-    sonDegat(0), aSupprimer(false), sonType(unType)
+    sonType(unType), sonChemin(unChemin), sonEtapeChemin(0),
+    sonDegat(0), aSupprimer(false)
 {
     saPosition = QPointF((*sonChemin)[0].x()*TAILLE_ENNEMI + (WIDTH-32*TAILLE_GRILLE)/2,
                          (*sonChemin)[0].y()*TAILLE_ENNEMI);
     sonIncrement = QPointF();
 
+    type();
+
     calcul((*sonChemin)[1]);
     sonPas = 0;
-
-    type();
 }
 
 
 void Ennemi::type()
 {
+    int n_pas[3] = { 30, 35, 60 };
     int pv[3] = { 100, 300, 1000 };
     int prix[3] = { 500, 1000, 5000 };
 
     sonImage = QImage("data/ennemi" + QString::number(sonType) + ".png");
     sonImageDegat = QImage("data/ennemi" + QString::number(sonType) + "_degat.png");
+    sonNombrePas = n_pas[sonType];
     sesPV = pv[sonType];
     sonPrix = prix[sonType];
 }
@@ -67,7 +69,7 @@ void Ennemi::calcul(QPointF unePositionArrivee)
     saPositionCible = QPointF(unePositionArrivee.x()*TAILLE_ENNEMI + (WIDTH-32*TAILLE_GRILLE)/2,
                               unePositionArrivee.y()*TAILLE_ENNEMI);
 
-    sonIncrement = (saPositionCible - saPosition) / PAS;
+    sonIncrement = (saPositionCible - saPosition) / sonNombrePas;
 }
 
 
@@ -76,7 +78,7 @@ void Ennemi::deplace()
     saPosition += sonIncrement;
     sonPas++;
 
-    if (sonPas == PAS)
+    if (sonPas == sonNombrePas)
     {
         if (sonEtapeChemin+2 < sonChemin->size())
         {

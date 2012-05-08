@@ -24,12 +24,8 @@ Terrain::Terrain(Partie *unePartie, std::vector<QPoint>* unChemin, QObject *pare
 Terrain::~Terrain()
 {
     for (std::vector< std::vector<Tourelle*> >::iterator it = saGrilleTourelles->begin(); it != saGrilleTourelles->end(); it++)
-    {
         for (std::vector<Tourelle*>::iterator jt = it->begin(); jt != it->end(); jt++)
-        {
             delete *jt;
-        }
-    }
 
     delete saGrilleTourelles;
     delete saListeEnnemis;

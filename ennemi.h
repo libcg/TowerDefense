@@ -8,7 +8,6 @@
 #include <QTextStream>
 
 #define TAILLE_ENNEMI 32
-#define PAS 30
 
 class Ennemi : public QObject
 {
@@ -18,16 +17,17 @@ private:
     std::vector<QPoint> *sonChemin;
     QImage sonImage;
     QImage sonImageDegat;
+    unsigned int sonNombrePas;
+    unsigned int sonType;
+    unsigned int sonPrix;
 
     QPointF saPosition;
     QPointF sonIncrement;
     unsigned int sonPas;
     unsigned int sonEtapeChemin;
+    int sesPV;
     int sonDegat;
     bool aSupprimer;
-    int sonType;
-    int sesPV;
-    int sonPrix;
 
     void type();
     void calcul(QPointF unePositionArrivee);
