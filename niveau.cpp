@@ -1,5 +1,6 @@
 #include "niveau.h"
 #include <QTextStream>
+#include <QFile>
 
 Niveau::Niveau(QObject *parent) :
     QObject(parent), estCharge(false)

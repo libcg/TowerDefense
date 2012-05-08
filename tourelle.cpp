@@ -1,6 +1,7 @@
 #include "tourelle.h"
 #include "jeu.h"
 #include <QPainter>
+#include <QFile>
 #include <cmath>
 #include <string>
 

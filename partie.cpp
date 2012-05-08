@@ -1,5 +1,6 @@
 #include "partie.h"
 #include <QTextStream>
+#include <QFile>
 
 Partie::Partie(QObject *parent) :
     QObject(parent)
