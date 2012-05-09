@@ -242,7 +242,8 @@ void Partie::afficheCredits(QPainter *unPainter)
     unPainter->translate(0, HEIGHT-20);
     unPainter->setPen(Qt::white);
     unPainter->setBrush(Qt::black);
-    unPainter->drawText(0, 0, WIDTH-10, 20, Qt::AlignRight, QString::number(sesCredits) + " credit(s)");
+    unPainter->drawText(0, 0, WIDTH-10, 20, Qt::AlignRight,
+                        QString::number(sesCredits) + QString::fromUtf8(" crédit(s)"));
 
     unPainter->restore();
 }
@@ -262,7 +263,7 @@ void Partie::affiche(Curseur *unCurseur, QPainter *unPainter)
     switch (sonEtat)
     {
         case DEFAITE:
-            afficheEtat(unPainter, "Defaite", "");
+            afficheEtat(unPainter, QString::fromUtf8("Défaite"), "");
         break;
         case VICTOIRE:
             afficheEtat(unPainter, "Victoire", "Cliquez pour continuer");

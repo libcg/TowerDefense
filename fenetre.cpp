@@ -14,12 +14,13 @@ Fenetre::Fenetre(QWidget *parent) :
 
     saMessageBox = new QMessageBox(
                 QMessageBox::NoIcon, "Comment jouer?",
+                QString::fromUtf8(
                 "Clic gauche pour placer une tourelle,\n"
                 "Clic droit pour changer de type de tourelle.\n"
                 "\n\n"
-                "Vos credits sont limites, et augmenteront lorsque les ennemis sont detruits.\n"
+                "Vos crédits sont limités, et augmenteront lorsque les ennemis sont détruits.\n"
                 "\n\n"
-                "Bonne chance !",
+                "Bonne chance !"),
                 QMessageBox::NoButton, this);
 }
 
