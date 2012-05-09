@@ -44,7 +44,7 @@ private:
 
     void afficheBarreVie(QPainter *unPainter);
     void afficheInfoVague(QPainter *unPainter);
-    void afficheEtat(QPainter *unPainter, QString unTitre);
+    void afficheEtat(QPainter *unPainter, QString unTitre, QString unSousTitre);
     void afficheCredits(QPainter *unPainter);
     bool fin();
     void chargerNiveau();

@@ -217,7 +217,7 @@ void Partie::afficheInfoVague(QPainter *unPainter)
 }
 
 
-void Partie::afficheEtat(QPainter *unPainter, QString unTitre)
+void Partie::afficheEtat(QPainter *unPainter, QString unTitre, QString unSousTitre)
 {
     unPainter->save();
 
@@ -226,8 +226,10 @@ void Partie::afficheEtat(QPainter *unPainter, QString unTitre)
     unPainter->drawRect(QRect(0, 0, WIDTH, HEIGHT));
 
     unPainter->setPen(Qt::white);
-    unPainter->setFont(QFont("Arial", 80));
+    unPainter->setFont(QFont("Arial", 70));
     unPainter->drawText(0, 0, WIDTH, HEIGHT, Qt::AlignCenter, unTitre);
+    unPainter->setFont(QFont("Arial", 25));
+    unPainter->drawText(0, 0, WIDTH, HEIGHT, Qt::AlignCenter, "\n\n\n" + unSousTitre);
 
     unPainter->restore();
 }
@@ -260,13 +262,13 @@ void Partie::affiche(Curseur *unCurseur, QPainter *unPainter)
     switch (sonEtat)
     {
         case DEFAITE:
-            afficheEtat(unPainter, "Defaite");
+            afficheEtat(unPainter, "Defaite", "");
         break;
         case VICTOIRE:
-            afficheEtat(unPainter, "Victoire");
+            afficheEtat(unPainter, "Victoire", "Cliquez pour continuer");
         break;
         case FIN:
-            afficheEtat(unPainter, "Fin de partie");
+            afficheEtat(unPainter, "Fin de partie", "");
         break;
     }
 }
