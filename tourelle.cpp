@@ -29,8 +29,8 @@ Tourelle::~Tourelle()
 
 void Tourelle::type()
 {
-    int portee[] = { 100, 400 };
-    double tps[] = { 3, 0.5 };
+    int portee[] = { 100, 200 };
+    double tps[] = { 3, 0.45 };
     int degats[] = { 5, 50 };
 
     sonImageBase = QImage("data/tourelle_base.png");

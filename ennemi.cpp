@@ -25,7 +25,7 @@ void Ennemi::type()
 {
     int n_pas[] = { 30, 35, 60 };
     int pv[] = { 100, 300, 1000 };
-    int prix[] = { 500, 1000, 5000 };
+    int prix[] = { 500, 1000, 2500 };
 
     sonImage = QImage("data/ennemi" + QString::number(sonType) + ".png");
     sonImageDegat = QImage("data/ennemi" + QString::number(sonType) + "_degat.png");

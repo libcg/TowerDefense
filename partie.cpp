@@ -159,6 +159,8 @@ void Partie::niveauSuivant()
     sonNumeroNiveau++;
 
     chargerNiveau();
+
+    chargeImageTypeTourelle();
 }
 
 
