@@ -42,6 +42,7 @@ void Partie::decompte()
         sonEtat = fin() ? FIN : VICTOIRE;
 }
 
+
 void Partie::infligerDegat(int unDegat)
 {
     saVie -= unDegat;
