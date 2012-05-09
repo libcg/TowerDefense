@@ -1,14 +1,28 @@
 #include "fenetre.h"
 #include <QApplication>
 #include <QThread>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
-  QApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-  Fenetre *laFenetre = new Fenetre();
+    QDir leDir("data/");
+    if (!leDir.exists())
+    {
+        QMessageBox sonAvertissement(
+            QMessageBox::NoIcon, "Erreur",
+            "Le dossier data/ n'existe pas.\n"
+            "Copiez-le depuis le dossier du projet.",
+            QMessageBox::Ok);
 
-  laFenetre->show();
+        sonAvertissement.exec();
+        return 1;
+    }
 
-  return app.exec();
+    Fenetre *laFenetre = new Fenetre();
+
+    laFenetre->show();
+
+    return app.exec();
 }
