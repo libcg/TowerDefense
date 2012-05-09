@@ -40,6 +40,11 @@ void Partie::decompte()
     }
     else if (sonTerrain->getSaListeEnnemis()->size() == 0)
         sonEtat = fin() ? FIN : VICTOIRE;
+
+    if (sonEtat == VICTOIRE)
+    {
+        sauvegarderPartie();
+    }
 }
 
 
