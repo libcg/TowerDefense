@@ -74,10 +74,9 @@ public:
     /*!
       * \brief Affiche un terrain
       *
-      * @param unCurseur Pointeur vers un curseur virtuel
       * @param unPainter Pointeur vers un painter
       */
-    void affiche(Curseur *unCurseur, QPainter *unPainter);
+    void affiche(QPainter *unPainter);
 
     /*!
       * \brief Affiche une tourelle en survol
@@ -91,10 +90,8 @@ public:
 
     /*!
       * \brief Logique d'un terrain
-      *
-      * @param unCurseur Pointeur vers un curseur virtuel
       */
-    void logique(Curseur *unCurseur);
+    void logique();
 
     /*!
       * \brief Ajoute un ennemi au terrain

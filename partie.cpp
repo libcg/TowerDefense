@@ -254,7 +254,7 @@ void Partie::afficheCredits(QPainter *unPainter)
 
 void Partie::affiche(Curseur *unCurseur, QPainter *unPainter)
 {
-    sonTerrain->affiche(unCurseur, unPainter);
+    sonTerrain->affiche(unPainter);
     sonTerrain->afficheSurvol(unCurseur, unPainter, &sonImageBaseTourelle,
                               sesCredits - Tourelle::prix(sonTypeTourelle) >= 0 ? &sonImageTypeTourelle
                                                                                 : NULL);
@@ -294,7 +294,7 @@ void Partie::logique(Curseur *unCurseur)
                 if (sonTerrain->ajouteTourelle(unCurseur, sonTypeTourelle))
                     sesCredits -= Tourelle::prix(sonTypeTourelle);
 
-            sonTerrain->logique(unCurseur);
+            sonTerrain->logique();
         }
         break;
         case VICTOIRE:

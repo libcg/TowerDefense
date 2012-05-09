@@ -145,7 +145,7 @@ bool Terrain::ajouteTourelle(Curseur *unCurseur, int unType)
 }
 
 
-void Terrain::affiche(Curseur* unCurseur, QPainter* unPainter)
+void Terrain::affiche(QPainter* unPainter)
 {
     /* On affiche le sol */
 
@@ -222,7 +222,7 @@ void Terrain::afficheSurvol(Curseur *unCurseur, QPainter *unPainter, QImage *une
 }
 
 
-void Terrain::logique(Curseur* unCurseur)
+void Terrain::logique()
 {
     for (unsigned int i=0; i<TAILLE_GRILLE; i++)
         for (unsigned int j=0; j<TAILLE_GRILLE; j++)
