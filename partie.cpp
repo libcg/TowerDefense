@@ -94,6 +94,8 @@ void Partie::chargerPartie()
     sonTerrain->charge(&stream);
 
     file.close();
+
+    chargeImageTypeTourelle();
 }
 
 
