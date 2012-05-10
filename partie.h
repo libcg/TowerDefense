@@ -112,6 +112,11 @@ public:
     explicit Partie(QObject *parent = 0);
 
     /*!
+      * \brief Destructeur de la classe Partie
+      */
+    ~Partie();
+
+    /*!
       * \brief Inflige un dégât à la base
       *
       * @param unDegat Points de vie à enlever

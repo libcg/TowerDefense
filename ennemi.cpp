@@ -117,7 +117,9 @@ void Ennemi::infligerDegat(int unDegat)
 {
     sonDegat = 5;
     sesPV -= unDegat;
-    if (sesPV <= 0) aSupprimer = true;
+
+    if (sesPV <= 0)
+        aSupprimer = true;
 }
 
 

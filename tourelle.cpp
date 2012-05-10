@@ -80,8 +80,23 @@ void Tourelle::tir()
 {
     if (sonEnnemiCible != NULL)
     {
+        std::list<Ennemi*>::iterator it;
+        for (it = saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
+            if (*it == sonEnnemiCible)
+                break;
+
+        /* sonEnnemiCible n'a pas été trouvé dans la liste, arrêt */
+        if (it == saListeEnnemis->end())
+        {
+            sonEnnemiCible = NULL;
+            return;
+        }
+
         sonEnnemiCible->infligerDegat(sesDegats);
         sonTir = DUREE_TIR;
+
+        if (sonEnnemiCible->estASupprimer())
+            sonEnnemiCible = NULL;
     }
 }
 

@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    Fenetre *laFenetre = new Fenetre();
+    Fenetre laFenetre;
 
-    laFenetre->show();
+    laFenetre.show();
 
     return app.exec();
 }

@@ -19,6 +19,14 @@ Partie::Partie(QObject *parent) :
 }
 
 
+Partie::~Partie()
+{
+    delete sonTerrain;
+    delete sonNiveau;
+    delete sonTimerDecompte;
+}
+
+
 void Partie::decompte()
 {
     if (sonDecompteTemps > 0)

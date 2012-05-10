@@ -28,6 +28,8 @@ Fenetre::Fenetre(QWidget *parent) :
 Fenetre::~Fenetre()
 {
     delete ui;
+    delete sonJeu;
+    delete saMessageBox;
 }
 
 

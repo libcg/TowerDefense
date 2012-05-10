@@ -27,6 +27,9 @@ Terrain::~Terrain()
         for (std::vector<Tourelle*>::iterator jt = it->begin(); jt != it->end(); jt++)
             delete *jt;
 
+    for (std::list<Ennemi*>::iterator it = saListeEnnemis->begin(); it != saListeEnnemis->end(); it++)
+        delete *it;
+
     delete saGrilleTourelles;
     delete saListeEnnemis;
     delete saGrilleChemin;
